@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3E2298</color>
+    <color name="colorPrimaryDark">#130446</color>
+    <color name="colorPrimaryLight">#BFB2E8</color>
+    <color name="colorAccent">#B1166E</color>
+    <color name="colorAccentDark">#51022F</color>
+    <color name="colorAccentLight">#EEB0D3</color>
+    <color name="colorExtra">#118484</color>
+    <color name="colorExtraDark">#023D3D</color>
+    <color name="colorExtraLight">#A8E4E4</color>
+    
+    <color name="colorLightSchemeButtons">#fffb89</color>
+    <color name="colorLightSchemeEmptyCell">#d2feff</color>
+    <color name="colorLightSchemeBackground">#f68af9</color>
+    <color name="colorLightSchemeFilledCell">#a540c8</color>
+
+    <color name="colorDarkSchemeButtons">#b891d5</color>
+    <color name="colorDarkSchemeEmptyCell">#4d3d9a</color>
+    <color name="colorDarkSchemeBackground">#021435</color>
+    <color name="colorDarkSchemeFilledCell">#28d381</color>
+    
+
+</resources>
