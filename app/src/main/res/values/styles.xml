@@ -10,7 +10,11 @@
     <style name="LightButtons">
         <item name="android:background">@color/colorLightSchemeButtons</item>
         <item name="android:textColor">@color/colorLightSchemeFilledCell</item>
+        <item name="color">@color/colorLightSchemeButtons</item>
+        <item name="fontFamily">@font/nunito</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:layout_margin">10dp</item>
+
     </style>
 
 </resources>

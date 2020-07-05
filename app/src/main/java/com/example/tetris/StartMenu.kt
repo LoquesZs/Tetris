@@ -10,9 +10,14 @@ class StartMenu : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_menu_activity)
+
         val startGameIntent = Intent(this, TetrisActivity::class.java)
         start_button.setOnClickListener {
             startActivity(startGameIntent)
+        }
+
+        quit_button.setOnClickListener {
+            this.finish()
         }
     }
 }

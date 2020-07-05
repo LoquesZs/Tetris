@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:text="@string/score_tv"
             android:textSize="16sp"
-            android:fontFamily="@font/rubik_mono_one"
+            android:fontFamily="@font/nunito"
             android:textColor="@color/colorLightSchemeEmptyCell" />
 
         <TextView
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:fontFamily="@font/rubik_mono_one"
+            android:fontFamily="@font/nunito"
             android:textColor="@color/colorLightSchemeEmptyCell" />
 
     </LinearLayout>

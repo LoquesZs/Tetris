@@ -2,12 +2,13 @@
     <string name="app_name" translatable="false">Tetris</string>
     <string name="score_tv" translatable="false">Score:</string>
     <string name="title_activity_start_menu" translatable="false">StartMenuActivity</string>
-    <string name="start_game_button" translatable="false">Start game</string>
+    <string name="start_game_button" translatable="false">Play</string>
     <string name="highscores_button" translatable="false">Highscores</string>
     <string name="settings_button" translatable="false">Settings</string>
     <string name="quit_button" translatable="false">Quit</string>
     <string name="content_description_left_button" translatable="false">Left Button</string>
     <string name="content_description_rotate_button" translatable="false">Rotate Button</string>
     <string name="content_description_right_button" translatable="false">Right Button</string>
+    <string name="logo_iv_content_description">Image</string>
 
 </resources>
