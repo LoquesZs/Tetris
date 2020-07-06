@@ -12,13 +12,14 @@ class TetrisActivity : AppCompatActivity() {
 
     private var score = 0
     private var globalX = 4
-    private var speed = 300L
+    private val startSpeed = 300L
+    private var speed = startSpeed
     private var globalY = 0
     private var nextDrop = false
     private var figuresFallCoroutine = GlobalScope.launch(Dispatchers.Main) { figureDrop() }
     private var figureIndex = 0
     private var figures = arrayListOf (
-        arrayListOf(0 to 0, 0 to -1, 0 to -2, 0 to -3),     // |          #фигуры to состояние фигуры
+        arrayListOf(0 to 0, 0 to -1, 0 to -2, 0 to -3),     // |          #фигуры
         arrayListOf(0 to 0, 1 to 0, 2 to 0, 3 to 0),        // ....
         arrayListOf(0 to 0, 0 to -1, 0 to -2, 0 to -3),     // |
         arrayListOf(0 to 0, 1 to 0, 2 to 0, 3 to 0),        // ....
@@ -62,7 +63,8 @@ class TetrisActivity : AppCompatActivity() {
         score_display.text = score.toString()
 
         left_button.setOnClickListener {
-            if (globalY + figure.last().second !in 0..19 || globalX == 0 || isLeftCellFilled()) return@setOnClickListener else {
+            checkIndicesUnderTheFigure()
+            if (globalY + figure.last().second !in 0 until yCellCount || globalX == 0 || isLeftCellFilled()) return@setOnClickListener else {
                 clearFieldFromFigure()
                 globalX--
                 drawFigure()
@@ -89,7 +91,8 @@ class TetrisActivity : AppCompatActivity() {
         }
 
         right_button.setOnClickListener {
-            if ((globalY + figure.last().second !in 0..19 || globalX + figure.getRightXIndex() == xCellCount - 1 || isRightCellFilled())) return@setOnClickListener else {
+            checkIndicesUnderTheFigure()
+            if (globalY + figure.last().second !in (0 until yCellCount) || globalX + figure.getRightXIndex() == xCellCount - 1 || isRightCellFilled()) return@setOnClickListener else {
                 clearFieldFromFigure()
                 globalX++
                 drawFigure()
@@ -103,7 +106,7 @@ class TetrisActivity : AppCompatActivity() {
             tetrisField.invalidate()
             score = 0
             score_display.text = score.toString()
-            speed = 300L
+            speed = startSpeed
             globalX = 4
             figuresFallCoroutine = GlobalScope.launch(Dispatchers.Main) { figureDrop() }
         }
@@ -117,11 +120,10 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private suspend fun figureDrop() {
-        nextDropCheck()
-        nextDrop = false
         scoreUp(4)
         score_display.text = score.toString()
         for (y in 0 until yCellCount) {
+            nextDropCheck()
             left_button.isClickable = true
             right_button.isClickable = true
             globalY = y
@@ -155,22 +157,47 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun drawFigure() {
+        left_button.isClickable = false
+        right_button.isClickable = false
+        rotate_button.isClickable = false
+
+        var nextDropCheckSum = 0
+        for (point in figure.indices){
+            val yIndex  = globalY + figure[point].second
+            val xIndex = globalX + figure[point].first
+            if (!nextDrop && yIndex in 0 until yCellCount-1 && !figure.isIndicesInFigure (figure[point].first, figure[point].second + 1) && (tetrisField.field[xIndex][yIndex + 1] == 1)) {
+                nextDropCheckSum++
+            }
+        }
+        nextDrop = when {
+            nextDropCheckSum == 0 && globalY in 0 until yCellCount-1 -> false
+            else -> true
+
+        }
+
+        tetrisField.invalidate()
+
         for (point in figure.indices) {
             val yIndex = globalY + figure[point].second
             val xIndex = globalX + figure[point].first
             if (yIndex in 0..19) tetrisField.field[xIndex][yIndex] = 1
         }
         tetrisField.invalidate()
+
+        left_button.isClickable = true
+        right_button.isClickable = true
+        rotate_button.isClickable = true
+    }
+
+    private fun checkIndicesUnderTheFigure() {
         var nextDropCheckSum = 0
         for (point in figure.indices){
             val yIndex  = globalY + figure[point].second
             val xIndex = globalX + figure[point].first
-            if (!nextDrop && yIndex in 0..18 && !figure.isIndicesInFigure (figure[point].first, figure[point].second + 1) && (tetrisField.field[xIndex][yIndex + 1] == 1)) {
-                nextDropCheckSum++
-            }
+            if (!nextDrop && yIndex in 0 until yCellCount-1 && !figure.isIndicesInFigure (figure[point].first, figure[point].second + 1) && (tetrisField.field[xIndex][yIndex + 1] == 1))  nextDropCheckSum++
         }
         nextDrop = when {
-            nextDropCheckSum == 0 && globalY in 0..18 -> false
+            nextDropCheckSum == 0 && globalY in 0 until yCellCount-1 -> false
             else -> true
         }
         tetrisField.invalidate()
@@ -237,8 +264,8 @@ class TetrisActivity : AppCompatActivity() {
         for (point in figure.indices) {
             val xIndex = globalX + figure[point].first
             val yIndex = globalY + figure[point].second
-            if (yIndex in 1..19) {
-                if(xIndex in 1..9 && !figure.isIndicesInFigure((figure[point].first - 1), (figure[point].second)) && tetrisField.field[xIndex - 1][yIndex] == 1) isLeftCellFilled = true
+            if (yIndex in 1 until yCellCount) {
+                if(xIndex in 1 until xCellCount && !figure.isIndicesInFigure((figure[point].first - 1), (figure[point].second)) && tetrisField.field[xIndex - 1][yIndex] == 1) isLeftCellFilled = true
             }
         }
         return isLeftCellFilled
@@ -249,8 +276,8 @@ class TetrisActivity : AppCompatActivity() {
         for (point in figure.indices) {
             val xIndex = globalX + figure[point].first
             val yIndex = globalY + figure[point].second
-            if (globalY in 1..19) {
-                if(xIndex in 0..8 && !figure.isIndicesInFigure((figure[point].first + 1), (figure[point].second)) && tetrisField.field[xIndex + 1][yIndex] == 1) isRightCellFilled = true
+            if (globalY in 1 until yCellCount) {
+                if(xIndex in 0 until xCellCount-1 && !figure.isIndicesInFigure((figure[point].first + 1), (figure[point].second)) && tetrisField.field[xIndex + 1][yIndex] == 1) isRightCellFilled = true
             }
         }
         return isRightCellFilled
