@@ -50,7 +50,7 @@
             android:layout_weight="0.33"
             android:background="@color/colorLightSchemeButtons"
             android:src="@drawable/ic_light_left"
-            android:contentDescription="@string/content_description_left_button" />
+            android:contentDescription="@string/content_description_image_button" />
 
         <ImageButton
             android:id="@+id/rotate_button"
@@ -60,7 +60,15 @@
             android:layout_weight="0.33"
             android:background="@color/colorLightSchemeButtons"
             android:src="@drawable/ic_rotate_light"
-            android:contentDescription="@string/content_description_left_button" />
+            android:contentDescription="@string/content_description_image_button" />
+
+        <Button
+            android:id="@+id/speed_up_button"
+            style="@style/LightButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/speed_up_button"
+            />
 
         <ImageButton
             android:id="@+id/right_button"
@@ -70,7 +78,7 @@
             android:layout_weight="0.33"
             android:background="@color/colorLightSchemeButtons"
             android:src="@drawable/ic_light_right"
-            android:contentDescription="@string/content_description_left_button" />
+            android:contentDescription="@string/content_description_image_button" />
     </LinearLayout>
 
 </LinearLayout>

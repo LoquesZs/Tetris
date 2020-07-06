@@ -1,10 +1,14 @@
 package com.example.tetris
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.tetris_activity.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -81,6 +85,7 @@ class TetrisActivity : AppCompatActivity() {
                     val xIndex = globalX + nextFigure[point].first
                     if (tetrisField.field[xIndex][yIndex] == 1 && tetrisField.field[xIndex][yIndex + 1] == 1 && !figure.isIndicesInFigure(nextFigure[point].first, nextFigure[point].second)) return@setOnClickListener
                 }
+                checkIndicesUnderTheFigure()
                 clearFieldFromFigure()
                 figure = figures[rotatedFigureIndex]
                 figureIndex = rotatedFigureIndex
@@ -109,6 +114,15 @@ class TetrisActivity : AppCompatActivity() {
             speed = startSpeed
             globalX = 4
             figuresFallCoroutine = GlobalScope.launch(Dispatchers.Main) { figureDrop() }
+        }
+
+        speed_up_button.setOnTouchListener { v, event ->
+            v.performClick()
+            when (event?.action) {
+                MotionEvent.ACTION_DOWN -> speed /= 4
+                MotionEvent.ACTION_UP -> speed *= 4
+            }
+            v?.onTouchEvent(event) ?: true
         }
 
         figuresFallCoroutine

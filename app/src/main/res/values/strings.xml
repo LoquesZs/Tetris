@@ -6,9 +6,8 @@
     <string name="highscores_button" translatable="false">Highscores</string>
     <string name="settings_button" translatable="false">Settings</string>
     <string name="quit_button" translatable="false">Quit</string>
-    <string name="content_description_left_button" translatable="false">Left Button</string>
-    <string name="content_description_rotate_button" translatable="false">Rotate Button</string>
-    <string name="content_description_right_button" translatable="false">Right Button</string>
+    <string name="content_description_image_button" translatable="false">Image Button</string>
     <string name="logo_iv_content_description">Image</string>
+    <string name="speed_up_button">Speed Up!</string>
 
 </resources>
