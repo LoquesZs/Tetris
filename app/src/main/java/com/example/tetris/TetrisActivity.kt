@@ -127,10 +127,9 @@ class TetrisActivity : AppCompatActivity() {
 
         speed_up_button.setOnTouchListener { v, event ->
             v.performClick()
-            val currentSpeed = speed
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> speed /= 4
-                MotionEvent.ACTION_UP -> speed = currentSpeed
+                MotionEvent.ACTION_UP -> speed *= 4
             }
             v?.onTouchEvent(event) ?: true
         }
