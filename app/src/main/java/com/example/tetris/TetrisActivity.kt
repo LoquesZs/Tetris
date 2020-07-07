@@ -127,9 +127,10 @@ class TetrisActivity : AppCompatActivity() {
 
         speed_up_button.setOnTouchListener { v, event ->
             v.performClick()
+            val currentSpeed = speed
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> speed /= 4
-                MotionEvent.ACTION_UP -> speed *= 4
+                MotionEvent.ACTION_UP -> speed = currentSpeed
             }
             v?.onTouchEvent(event) ?: true
         }
@@ -346,7 +347,7 @@ class TetrisActivity : AppCompatActivity() {
 
     private fun loadBestScore() {
         sharedPreferences = getPreferences(Context.MODE_PRIVATE)
-        bestScore = sharedPreferences.getString(bestScoreStorage, "") ?: "0"
+        bestScore = sharedPreferences.getString(bestScoreStorage, "0") ?: "0"
     }
 
 }

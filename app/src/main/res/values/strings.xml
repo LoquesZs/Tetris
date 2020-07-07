@@ -7,7 +7,7 @@
     <string name="settings_button" translatable="false">Settings</string>
     <string name="quit_button" translatable="false">Quit</string>
     <string name="content_description_image_button" translatable="false">Image Button</string>
-    <string name="logo_iv_content_description">Image</string>
+    <string name="imageview_content_description">Image</string>
     <string name="speed_up_button">Speed Up!</string>
     <string name="new_game_button">New Game</string>
     <string name="best_score_prefix_tv">"Best Score: "</string>

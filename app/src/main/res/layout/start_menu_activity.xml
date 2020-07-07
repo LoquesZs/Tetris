@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorLightSchemeBackground"
-    android:padding="20dp"
+    android:padding="60dp"
     tools:context=".StartMenu">
 
     <ImageView
@@ -13,48 +14,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:contentDescription="@string/logo_iv_content_description"
-        android:padding="10dp"
-        android:src="@drawable/ic_logo" />
+        android:contentDescription="@string/imageview_content_description"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <GridLayout
+
+
+    <LinearLayout
         android:id="@+id/button_holder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="160dp"
-        android:columnCount="2"
-        android:rowCount="2">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/start_button"
             style="@style/LightButtons"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/start_game_button" />
-
-        <Button
-            android:id="@+id/highscore"
-            style="@style/LightButtons"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:text="@string/highscores_button" />
 
         <Button
             android:id="@+id/settings_button"
             style="@style/LightButtons"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/settings_button" />
 
-        <Button
-            android:id="@+id/quit_button"
-            style="@style/LightButtons"
-            android:layout_width="31dp"
-            android:layout_height="8dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:text="@string/quit_button" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/best_score_display_start_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextViews"
+        android:textSize="24sp"
+        android:drawableStart="@drawable/ic_cup"
+        app:layout_constraintBottom_toTopOf="@+id/button_holder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-    </GridLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

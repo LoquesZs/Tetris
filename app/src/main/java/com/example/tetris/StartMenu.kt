@@ -1,5 +1,6 @@
 package com.example.tetris
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,8 +17,9 @@ class StartMenu : AppCompatActivity() {
             startActivity(startGameIntent)
         }
 
-        quit_button.setOnClickListener {
-            this.finish()
-        }
+        val sharedPreferences = getSharedPreferences("TetrisActivity", Context.MODE_PRIVATE)
+
+        best_score_display_start_menu.text = sharedPreferences.getString("Best Score Storage", "0")
+
     }
 }
