@@ -23,7 +23,7 @@ class TetrisFieldView(context: Context, attributeSet: AttributeSet?): View(conte
     private var paint = Paint()
 
 
-    private fun Canvas.drawArray(array: Array<Array<Int>>) {
+    private fun Canvas.drawTetrisField(array: Array<Array<Int>>) {
         for(index in array.indices){
             for (item in array[index].indices) {
                 if (array[index][item] == 0) {
@@ -52,7 +52,7 @@ class TetrisFieldView(context: Context, attributeSet: AttributeSet?): View(conte
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         setPaintParameters()
-        canvas?.drawArray(field)
+        canvas?.drawTetrisField(field)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

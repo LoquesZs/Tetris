@@ -1,5 +1,7 @@
 package com.example.tetris
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -14,6 +16,9 @@ import kotlin.random.nextInt
 
 class TetrisActivity : AppCompatActivity() {
 
+    private val bestScoreStorage = "Best Score Storage"
+    private lateinit var sharedPreferences: SharedPreferences
+    private var bestScore: String = "0"
     private var score = 0
     private var globalX = 4
     private val startSpeed = 300L
@@ -66,6 +71,9 @@ class TetrisActivity : AppCompatActivity() {
 
         score_display.text = score.toString()
 
+        loadBestScore()
+        best_score_display.text = bestScore
+
         left_button.setOnClickListener {
             checkIndicesUnderTheFigure()
             if (globalY + figure.last().second !in 0 until yCellCount || globalX == 0 || isLeftCellFilled()) return@setOnClickListener else {
@@ -104,8 +112,9 @@ class TetrisActivity : AppCompatActivity() {
             }
         }
 
-        tetrisField.setOnClickListener {
+        new_game_button.setOnClickListener {
             figuresFallCoroutine.cancel()
+            saveBestScore()
             figure = getRandomFigure()
             tetrisField.clearArray()
             tetrisField.invalidate()
@@ -131,6 +140,7 @@ class TetrisActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         figuresFallCoroutine.cancel()
+        saveBestScore()
     }
 
     private suspend fun figureDrop() {
@@ -321,6 +331,24 @@ class TetrisActivity : AppCompatActivity() {
             figureDrop()
         }
     }
+
+    private fun saveBestScore() {
+        sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        if (bestScore == "0") bestScore = score.toString()
+        if (bestScore.toInt() < score) {
+            bestScore = score.toString()
+        }
+        editor.putString(bestScoreStorage, bestScore)
+        editor.apply()
+        best_score_display.text = bestScore
+    }
+
+    private fun loadBestScore() {
+        sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+        bestScore = sharedPreferences.getString(bestScoreStorage, "") ?: "0"
+    }
+
 }
 
 
