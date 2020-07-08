@@ -21,14 +21,14 @@ class TetrisActivity : AppCompatActivity() {
     private var bestScore: String = "0"
     private var score = 0
     private var globalX = 4
-    private val startSpeed = 300L
+    private val startSpeed = 400L
     private var speed = startSpeed
     private var globalY = 0
     private var nextDrop = false
     private var figuresFallCoroutine = GlobalScope.launch(Dispatchers.Main) { figureDrop() }
     private var figureIndex = 0
     private var figures = arrayListOf (
-        arrayListOf(0 to 0, 0 to -1, 0 to -2, 0 to -3),     // |          #фигуры
+        arrayListOf(0 to 0, 0 to -1, 0 to -2, 0 to -3),     // |      фигуры
         arrayListOf(0 to 0, 1 to 0, 2 to 0, 3 to 0),        // ....
         arrayListOf(0 to 0, 0 to -1, 0 to -2, 0 to -3),     // |
         arrayListOf(0 to 0, 1 to 0, 2 to 0, 3 to 0),        // ....
@@ -88,12 +88,12 @@ class TetrisActivity : AppCompatActivity() {
             val rotatedFigureIndex = if (currentFigureState == 1) figureIndex + 3 else figureIndex - 1
             val nextFigure = figures[rotatedFigureIndex]
             try {
+                checkIndicesUnderTheFigure()
                 for (point in nextFigure.indices) {
                     val yIndex = globalY + nextFigure[point].second
                     val xIndex = globalX + nextFigure[point].first
                     if (tetrisField.field[xIndex][yIndex] == 1 && tetrisField.field[xIndex][yIndex + 1] == 1 && !figure.isIndicesInFigure(nextFigure[point].first, nextFigure[point].second)) return@setOnClickListener
                 }
-                checkIndicesUnderTheFigure()
                 clearFieldFromFigure()
                 figure = figures[rotatedFigureIndex]
                 figureIndex = rotatedFigureIndex
@@ -128,8 +128,8 @@ class TetrisActivity : AppCompatActivity() {
         speed_up_button.setOnTouchListener { v, event ->
             v.performClick()
             when (event?.action) {
-                MotionEvent.ACTION_DOWN -> speed /= 4
-                MotionEvent.ACTION_UP -> speed *= 4
+                MotionEvent.ACTION_DOWN -> speed /= 5
+                MotionEvent.ACTION_UP -> speed *= 5
             }
             v?.onTouchEvent(event) ?: true
         }
@@ -215,7 +215,7 @@ class TetrisActivity : AppCompatActivity() {
 
     private fun checkIndicesUnderTheFigure() {
         var nextDropCheckSum = 0
-        for (point in figure.indices){
+        for (point in figure.indices) {
             val yIndex  = globalY + figure[point].second
             val xIndex = globalX + figure[point].first
             if (!nextDrop && yIndex in 0 until yCellCount-1 && !figure.isIndicesInFigure (figure[point].first, figure[point].second + 1) && (tetrisField.field[xIndex][yIndex + 1] == 1))  nextDropCheckSum++
@@ -352,6 +352,8 @@ class TetrisActivity : AppCompatActivity() {
 }
 
 
-//TODO: сохранение ТОП-10 лучшего счёта
-//TODO: исправить баг со входом фигуры в заполненную площадь
-//TODO: шрифты и т.д.
+//TODO(): добавить обновление лучшего результата на начальном экране
+//TODO: Полностью пересмотреть механику движения фигуры
+//TODO: Анимации
+//TODO: Настройки
+//TODO: Смена цветовых схем
