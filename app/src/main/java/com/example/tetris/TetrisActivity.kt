@@ -75,12 +75,15 @@ class TetrisActivity : AppCompatActivity() {
         best_score_display.text = bestScore
 
         left_button.setOnClickListener {
-            checkIndicesUnderTheFigure()
-            if (globalY + figure.last().second !in 0 until yCellCount || globalX == 0 || isLeftCellFilled()) return@setOnClickListener else {
+            if (globalY + figure.last().second !in 0 until yCellCount ||
+                globalX == 0 ||
+                isLeftCellFilled()) return@setOnClickListener else {
                 clearFieldFromFigure()
                 globalX--
+                nextDropSetter()
                 drawFigure()
             }
+            Log.d("nextDrop", nextDrop.toString())
         }
 
         rotate_button.setOnClickListener {
@@ -88,15 +91,17 @@ class TetrisActivity : AppCompatActivity() {
             val rotatedFigureIndex = if (currentFigureState == 1) figureIndex + 3 else figureIndex - 1
             val nextFigure = figures[rotatedFigureIndex]
             try {
-                checkIndicesUnderTheFigure()
                 for (point in nextFigure.indices) {
                     val yIndex = globalY + nextFigure[point].second
                     val xIndex = globalX + nextFigure[point].first
-                    if (tetrisField.field[xIndex][yIndex] == 1 && tetrisField.field[xIndex][yIndex + 1] == 1 && !figure.isIndicesInFigure(nextFigure[point].first, nextFigure[point].second)) return@setOnClickListener
+                    if (tetrisField.field[xIndex][yIndex] == 1
+                        && tetrisField.field[xIndex][yIndex + 1] == 1
+                        && !figure.isIndicesInFigure(nextFigure[point].first, nextFigure[point].second)) return@setOnClickListener
                 }
                 clearFieldFromFigure()
                 figure = figures[rotatedFigureIndex]
                 figureIndex = rotatedFigureIndex
+                nextDropSetter()
                 drawFigure()
             } catch(e: ArrayIndexOutOfBoundsException) {
                 return@setOnClickListener
@@ -104,12 +109,15 @@ class TetrisActivity : AppCompatActivity() {
         }
 
         right_button.setOnClickListener {
-            checkIndicesUnderTheFigure()
-            if (globalY + figure.last().second !in (0 until yCellCount) || globalX + figure.getRightXIndex() == xCellCount - 1 || isRightCellFilled()) return@setOnClickListener else {
+            if (globalY + figure.last().second !in (0 until yCellCount) ||
+                globalX + figure.getRightXIndex() == xCellCount - 1 ||
+                isRightCellFilled()) return@setOnClickListener else {
                 clearFieldFromFigure()
                 globalX++
+                nextDropSetter()
                 drawFigure()
             }
+            Log.d("nextDrop", nextDrop.toString())
         }
 
         new_game_button.setOnClickListener {
@@ -128,8 +136,8 @@ class TetrisActivity : AppCompatActivity() {
         speed_up_button.setOnTouchListener { v, event ->
             v.performClick()
             when (event?.action) {
-                MotionEvent.ACTION_DOWN -> speed /= 5
-                MotionEvent.ACTION_UP -> speed *= 5
+                MotionEvent.ACTION_DOWN -> speed /= 4
+                MotionEvent.ACTION_UP -> speed *= 4
             }
             v?.onTouchEvent(event) ?: true
         }
@@ -148,29 +156,16 @@ class TetrisActivity : AppCompatActivity() {
         score_display.text = score.toString()
         for (y in 0 until yCellCount) {
             nextDropCheck()
-            left_button.isClickable = true
-            right_button.isClickable = true
-            globalY = y
-            Log.d("Y", y.toString())
-            for (point in figure.indices) {
-                val yIndex = y + figure[point].second
-                if (yIndex < 0) continue
-                val xIndex = globalX + figure[point].first
-                if (yIndex != 0) {
-                    tetrisField.field[xIndex][yIndex - 1] = 0
-                }
-                tetrisField.field[xIndex][yIndex] = 1
-                if (!nextDrop && (y + figure.getBottomIndex(figure[point].first) == yCellCount - 1  || tetrisField.field[xIndex][y + figure.getBottomIndex(figure[point].first) + 1] == 1)) {
-                    nextDrop = true
-                }
+            setButtonsState(true)
+            if (!nextDrop) {
+                if (y in 1 until yCellCount) clearFieldFromFigure()
+                globalY = y
+                drawFigure()
+                nextDropSetter()
             }
             tetrisField.invalidate()
             delay(speed)
-            left_button.isClickable = false
-            right_button.isClickable = false
-            for (point in figure.indices) {
-                if (!nextDrop && ((y + figure[point].second + 1) == 1)) nextDrop
-            }
+            setButtonsState(false)
             if (nextDrop && y == 0) {
                 figuresFallCoroutine.cancel()
                 return
@@ -180,50 +175,37 @@ class TetrisActivity : AppCompatActivity() {
         }
     }
 
+    /*****************************************************
+
+    tetris utils
+
+    *****************************************************/
+
     private fun drawFigure() {
-        left_button.isClickable = false
-        right_button.isClickable = false
-        rotate_button.isClickable = false
-
-        var nextDropCheckSum = 0
-        for (point in figure.indices){
-            val yIndex  = globalY + figure[point].second
-            val xIndex = globalX + figure[point].first
-            if (!nextDrop && yIndex in 0 until yCellCount-1 && !figure.isIndicesInFigure (figure[point].first, figure[point].second + 1) && (tetrisField.field[xIndex][yIndex + 1] == 1)) {
-                nextDropCheckSum++
-            }
-        }
-        nextDrop = when {
-            nextDropCheckSum == 0 && globalY in 0 until yCellCount-1 -> false
-            else -> true
-
-        }
-
-        tetrisField.invalidate()
-
         for (point in figure.indices) {
             val yIndex = globalY + figure[point].second
             val xIndex = globalX + figure[point].first
-            if (yIndex in 0..19) tetrisField.field[xIndex][yIndex] = 1
+            if (yIndex in 0 until yCellCount) tetrisField.field[xIndex][yIndex] = 1
         }
-        tetrisField.invalidate()
 
-        left_button.isClickable = true
-        right_button.isClickable = true
-        rotate_button.isClickable = true
+        tetrisField.invalidate()
     }
 
-    private fun checkIndicesUnderTheFigure() {
+    private fun nextDropSetter() {
         var nextDropCheckSum = 0
         for (point in figure.indices) {
             val yIndex  = globalY + figure[point].second
             val xIndex = globalX + figure[point].first
-            if (!nextDrop && yIndex in 0 until yCellCount-1 && !figure.isIndicesInFigure (figure[point].first, figure[point].second + 1) && (tetrisField.field[xIndex][yIndex + 1] == 1))  nextDropCheckSum++
+            if (
+                yIndex in 0 until yCellCount-1 &&
+                !figure.isIndicesInFigure (figure[point].first, figure[point].second + 1) &&
+                (tetrisField.field[xIndex][yIndex + 1] == 1))  nextDropCheckSum++
         }
         nextDrop = when {
             nextDropCheckSum == 0 && globalY in 0 until yCellCount-1 -> false
             else -> true
         }
+
         tetrisField.invalidate()
     }
 
@@ -231,12 +213,8 @@ class TetrisActivity : AppCompatActivity() {
         for (point in figure.indices) {
             val yIndex = globalY + figure[point].second
             val xIndex = globalX + figure[point].first
-            if (yIndex in 0..19) tetrisField.field[xIndex][yIndex] = 0
+            if (yIndex in 0 until yCellCount) tetrisField.field[xIndex][yIndex] = 0
         }
-    }
-
-    private fun ArrayList<Pair<Int, Int>>.getBottomIndex(x: Int): Int {
-        return this.maxBy { it.first == x }!!.second
     }
 
     private fun ArrayList<Pair<Int, Int>>.isIndicesInFigure(x: Int, y: Int): Boolean {
@@ -289,7 +267,9 @@ class TetrisActivity : AppCompatActivity() {
             val xIndex = globalX + figure[point].first
             val yIndex = globalY + figure[point].second
             if (yIndex in 1 until yCellCount) {
-                if(xIndex in 1 until xCellCount && !figure.isIndicesInFigure((figure[point].first - 1), (figure[point].second)) && tetrisField.field[xIndex - 1][yIndex] == 1) isLeftCellFilled = true
+                if(xIndex in 1 until xCellCount
+                    && !figure.isIndicesInFigure((figure[point].first - 1), (figure[point].second))
+                    && tetrisField.field[xIndex - 1][yIndex] == 1) isLeftCellFilled = true
             }
         }
         return isLeftCellFilled
@@ -301,7 +281,9 @@ class TetrisActivity : AppCompatActivity() {
             val xIndex = globalX + figure[point].first
             val yIndex = globalY + figure[point].second
             if (globalY in 1 until yCellCount) {
-                if(xIndex in 0 until xCellCount-1 && !figure.isIndicesInFigure((figure[point].first + 1), (figure[point].second)) && tetrisField.field[xIndex + 1][yIndex] == 1) isRightCellFilled = true
+                if(xIndex in 0 until xCellCount-1
+                    && !figure.isIndicesInFigure((figure[point].first + 1), (figure[point].second))
+                    && tetrisField.field[xIndex + 1][yIndex] == 1) isRightCellFilled = true
             }
         }
         return isRightCellFilled
@@ -318,10 +300,11 @@ class TetrisActivity : AppCompatActivity() {
 
     private fun scoreUp(value: Int) {
         score += value
-        speed -= if (value >= 100) 5.toLong() else 0
+        speed -= if (value >= 100) 4.toLong() else 0
         score_display.text = score.toString()
     }
 
+    //TODO: переделать эту функцию
     private suspend fun nextDropCheck() {
         if (nextDrop) {
             globalX = 4
@@ -335,10 +318,7 @@ class TetrisActivity : AppCompatActivity() {
     private fun saveBestScore() {
         sharedPreferences = getPreferences(Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        if (bestScore == "0") bestScore = score.toString()
-        if (bestScore.toInt() < score) {
-            bestScore = score.toString()
-        }
+        if (bestScore == "0" || bestScore.toInt() < score) bestScore = score.toString()
         editor.putString(bestScoreStorage, bestScore)
         editor.apply()
         best_score_display.text = bestScore
@@ -349,10 +329,24 @@ class TetrisActivity : AppCompatActivity() {
         bestScore = sharedPreferences.getString(bestScoreStorage, "0") ?: "0"
     }
 
+    private fun setButtonsState(state: Boolean) {
+        when (state) {
+            true -> {
+                left_button.isClickable = true
+                right_button.isClickable = true
+                rotate_button.isClickable = true
+            }
+            false -> {
+                left_button.isClickable = false
+                right_button.isClickable = false
+                rotate_button.isClickable = false
+            }
+        }
+    }
 }
 
 
-//TODO(): добавить обновление лучшего результата на начальном экране
+//TODO: добавить обновление лучшего результата на начальном экране
 //TODO: Полностью пересмотреть механику движения фигуры
 //TODO: Анимации
 //TODO: Настройки
