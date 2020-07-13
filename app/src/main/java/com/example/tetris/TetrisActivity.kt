@@ -3,6 +3,8 @@ package com.example.tetris
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +27,8 @@ class TetrisActivity : AppCompatActivity() {
     private var speed = startSpeed
     private var globalY = 0
     private var nextDrop = false
-    private var figuresFallCoroutine = GlobalScope.launch(Dispatchers.Main) { figureDrop() }
+    private val pausableDispatcher = PausableDispatcher(Handler(Looper.getMainLooper()))
+    private var figuresFallCoroutine = GlobalScope.launch(pausableDispatcher) { figureDrop() }
     private var figureIndex = 0
     private var figures = arrayListOf (
         arrayListOf(0 to 0, 0 to -1, 0 to -2, 0 to -3),     // |      фигуры
@@ -64,6 +67,8 @@ class TetrisActivity : AppCompatActivity() {
         arrayListOf(0 to 0, 1 to 0, 0 to -1, 0 to -2)       // |_
     )
     private var figure = getRandomFigure() // x to y
+    private var speedBuffer = 0L
+    private val speedMagnifier = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +88,6 @@ class TetrisActivity : AppCompatActivity() {
                 nextDropSetter()
                 drawFigure()
             }
-            Log.d("nextDrop", nextDrop.toString())
         }
 
         rotate_button.setOnClickListener {
@@ -117,7 +121,6 @@ class TetrisActivity : AppCompatActivity() {
                 nextDropSetter()
                 drawFigure()
             }
-            Log.d("nextDrop", nextDrop.toString())
         }
 
         new_game_button.setOnClickListener {
@@ -130,16 +133,29 @@ class TetrisActivity : AppCompatActivity() {
             score_display.text = score.toString()
             speed = startSpeed
             globalX = 4
-            figuresFallCoroutine = GlobalScope.launch(Dispatchers.Main) { figureDrop() }
+            figuresFallCoroutine = GlobalScope.launch(pausableDispatcher) { figureDrop() }
         }
 
         speed_up_button.setOnTouchListener { v, event ->
             v.performClick()
-            when (event?.action) {
-                MotionEvent.ACTION_DOWN -> speed /= 4
-                MotionEvent.ACTION_UP -> speed *= 4
+            speed = when (event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    speedBuffer = speed
+                    speed / speedMagnifier
+                }
+                else -> speedBuffer
             }
             v?.onTouchEvent(event) ?: true
+        }
+
+        pause_button.setOnClickListener {
+            setButtonsState(false)
+            pausableDispatcher.pause()
+        }
+
+        resume_button.setOnClickListener {
+            setButtonsState(true)
+            pausableDispatcher.resume()
         }
 
         figuresFallCoroutine
@@ -147,9 +163,21 @@ class TetrisActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        figuresFallCoroutine.cancel()
+        pausableDispatcher.pause()
         saveBestScore()
     }
+
+    override fun onResume() {
+        super.onResume()
+        loadBestScore()
+        pausableDispatcher.resume()
+    }
+
+    /***********************************************
+
+    tetris utils
+
+     ************************************************/
 
     private suspend fun figureDrop() {
         scoreUp(4)
@@ -174,12 +202,6 @@ class TetrisActivity : AppCompatActivity() {
             tetrisField.invalidate()
         }
     }
-
-    /*****************************************************
-
-    tetris utils
-
-    *****************************************************/
 
     private fun drawFigure() {
         for (point in figure.indices) {
@@ -300,7 +322,7 @@ class TetrisActivity : AppCompatActivity() {
 
     private fun scoreUp(value: Int) {
         score += value
-        speed -= if (value >= 100) 4.toLong() else 0
+        speed -= if (value >= 100) speedMagnifier.toLong() else 0
         score_display.text = score.toString()
     }
 
@@ -345,9 +367,7 @@ class TetrisActivity : AppCompatActivity() {
     }
 }
 
-
-//TODO: добавить обновление лучшего результата на начальном экране
-//TODO: Полностью пересмотреть механику движения фигуры
+//TODO: Pop up, полное сохранение текущего состояния поля, для возможности продолжения
 //TODO: Анимации
 //TODO: Настройки
 //TODO: Смена цветовых схем

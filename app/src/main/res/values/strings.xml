@@ -10,6 +10,7 @@
     <string name="imageview_content_description">Image</string>
     <string name="speed_up_button">Speed Up!</string>
     <string name="new_game_button">New Game</string>
-    <string name="best_score_prefix_tv">"Best Score: "</string>
+    <string name="best_score_prefix_tv">"Best: "</string>
+
 
 </resources>
