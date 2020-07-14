@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.tetris_activity.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -67,8 +66,8 @@ class TetrisActivity : AppCompatActivity() {
         arrayListOf(0 to 0, 1 to 0, 0 to -1, 0 to -2)       // |_
     )
     private var figure = getRandomFigure() // x to y
-    private var speedBuffer = 0L
     private val speedMagnifier = 5
+    private var isSpeedUpButtonDown = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,12 +137,16 @@ class TetrisActivity : AppCompatActivity() {
 
         speed_up_button.setOnTouchListener { v, event ->
             v.performClick()
-            speed = when (event?.action) {
+            when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    speedBuffer = speed
-                    speed / speedMagnifier
+                    isSpeedUpButtonDown = true
+                    speed /= speedMagnifier
                 }
-                else -> speedBuffer
+
+                MotionEvent.ACTION_UP -> {
+                    speed *= speedMagnifier
+                    isSpeedUpButtonDown = false
+                }
             }
             v?.onTouchEvent(event) ?: true
         }
@@ -183,6 +186,7 @@ class TetrisActivity : AppCompatActivity() {
         scoreUp(4)
         score_display.text = score.toString()
         for (y in 0 until yCellCount) {
+            Log.d("Speed",speed.toString() + speed_up_button.isInTouchMode.toString())
             nextDropCheck()
             setButtonsState(true)
             if (!nextDrop) {
@@ -321,8 +325,12 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun scoreUp(value: Int) {
+        speed -= when {
+            value == 100 && isSpeedUpButtonDown -> 1.toLong()
+            value == 100 && !isSpeedUpButtonDown -> speedMagnifier.toLong()
+            else -> 0
+        }
         score += value
-        speed -= if (value >= 100) speedMagnifier.toLong() else 0
         score_display.text = score.toString()
     }
 
@@ -351,17 +359,19 @@ class TetrisActivity : AppCompatActivity() {
         bestScore = sharedPreferences.getString(bestScoreStorage, "0") ?: "0"
     }
 
-    private fun setButtonsState(state: Boolean) {
-        when (state) {
+    private fun setButtonsState(isClickable: Boolean) {
+        when (isClickable) {
             true -> {
                 left_button.isClickable = true
                 right_button.isClickable = true
                 rotate_button.isClickable = true
+                speed_up_button.isClickable = true
             }
             false -> {
                 left_button.isClickable = false
                 right_button.isClickable = false
                 rotate_button.isClickable = false
+                speed_up_button.isClickable = false
             }
         }
     }
@@ -371,3 +381,4 @@ class TetrisActivity : AppCompatActivity() {
 //TODO: Анимации
 //TODO: Настройки
 //TODO: Смена цветовых схем
+//TODO: Добавить поддержку старых версий

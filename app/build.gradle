@@ -8,10 +8,10 @@ android {
 
     defaultConfig {
         applicationId "com.example.tetris"
-        minSdkVersion 24
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "4.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
