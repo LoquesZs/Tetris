@@ -29,4 +29,9 @@ class StartMenu : AppCompatActivity() {
 
         best_score_display_start_menu.text = sharedPreferences.getString("Best Score Storage", "0")
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        this.finishAffinity()
+    }
 }

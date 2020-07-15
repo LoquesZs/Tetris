@@ -26,6 +26,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".PauseMenu"
+                    android:theme="@style/Theme.AppCompat.Translucent">
+        </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

@@ -1,6 +1,7 @@
 package com.example.tetris
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
@@ -19,7 +20,7 @@ class TetrisActivity : AppCompatActivity() {
 
     private val bestScoreStorage = "Best Score Storage"
     private lateinit var sharedPreferences: SharedPreferences
-    private var bestScore: String = "0"
+    private var bestScore = "0"
     private var score = 0
     private var globalX = 4
     private val startSpeed = 400L
@@ -152,13 +153,8 @@ class TetrisActivity : AppCompatActivity() {
         }
 
         pause_button.setOnClickListener {
-            setButtonsState(false)
-            pausableDispatcher.pause()
-        }
-
-        resume_button.setOnClickListener {
-            setButtonsState(true)
-            pausableDispatcher.resume()
+            val pauseIntent = Intent(this, PauseMenu::class.java)
+            startActivity(pauseIntent)
         }
 
         figuresFallCoroutine
@@ -172,8 +168,8 @@ class TetrisActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadBestScore()
         pausableDispatcher.resume()
+        loadBestScore()
     }
 
     /***********************************************

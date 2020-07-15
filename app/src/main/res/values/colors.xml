@@ -13,6 +13,7 @@
     <color name="colorLightSchemeButtons">#fffb89</color>
     <color name="colorLightSchemeEmptyCell">#d2feff</color>
     <color name="colorLightSchemeBackground">#f68af9</color>
+    <color name="colorLightSchemeTransparentBackground">#80f68af9</color>
     <color name="colorLightSchemeFilledCell">#a540c8</color>
 
     <color name="colorDarkSchemeButtons">#b891d5</color>

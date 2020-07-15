@@ -21,15 +21,6 @@ class PausableDispatcher(private val handler: Handler): CoroutineDispatcher() {
         if (isPaused) queue.add(block) else handler.post(block)
     }
 
-    @Synchronized fun pause() {
-        isPaused = true
-    }
-
-    @Synchronized fun resume() {
-        isPaused = false
-        runQueue()
-    }
-
     private fun runQueue() {
         queue.iterator().let {
             while (it.hasNext()) {
@@ -40,8 +31,12 @@ class PausableDispatcher(private val handler: Handler): CoroutineDispatcher() {
         }
     }
 
-    fun getIsPausedState(): Boolean {
-        return isPaused
+    @Synchronized fun pause() {
+        isPaused = true
     }
 
+    @Synchronized fun resume() {
+        isPaused = false
+        runQueue()
+    }
 }

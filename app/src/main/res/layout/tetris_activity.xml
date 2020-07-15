@@ -79,24 +79,15 @@
         <ImageButton
             android:id="@+id/pause_button"
             style="@style/LightButtons"
-            android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/resume_button"
+            android:layout_marginTop="2dp"
+            android:contentDescription="@string/content_description_image_button"
+            android:padding="5dp"
             android:src="@drawable/ic_pause_light"
-            android:contentDescription="@string/content_description_image_button" />
-
-        <ImageButton
-            android:id="@+id/resume_button"
-            style="@style/LightButtons"
-            android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_play_light"
-            android:contentDescription="@string/content_description_image_button"/>
+            app:layout_constraintTop_toBottomOf="@+id/new_game_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
