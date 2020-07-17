@@ -171,7 +171,7 @@ class TetrisActivity : AppCompatActivity() {
         pausableDispatcher.resume()
         loadBestScore()
     }
-
+    
     /***********************************************
 
     tetris utils
