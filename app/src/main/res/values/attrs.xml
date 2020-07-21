@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TetrisFieldView">
+        <attr name="emptyCellColor" format="color"/>
+        <attr name="filledCellColor" format="color"/>
+    </declare-styleable>
+    <declare-styleable name="change_theme_attrs">
+        <attr name="logo_icon" format="reference"/>
+        <attr name="left_button_icon" format="reference" />
+        <attr name="right_button_icon" format="reference" />
+        <attr name="rotate_button_icon" format="reference" />
+        <attr name="speed_up_button_icon" format="reference" />
+        <attr name="pause_button_icon" format="reference" />
+        <attr name="resume_button_icon" format="reference" />
+        <attr name="top_action_bar_color" format="reference" />
+        <attr name="switch_text" format="reference" />
+        <attr name="switch_text_color" format="reference"/>
+    </declare-styleable>
+</resources>

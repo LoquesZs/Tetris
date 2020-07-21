@@ -1,32 +1,118 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-    <style name="LightButtons">
-        <item name="android:background">@color/colorLightSchemeButtons</item>
-        <item name="android:textColor">@color/colorLightSchemeFilledCell</item>
-        <item name="fontFamily">@font/nunito</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-    <style name="TextViews">
-        <item name="android:fontFamily">@font/nunito</item>
-        <item name="android:textColor">@color/colorLightSchemeEmptyCell</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:layout_margin">10dp</item>
+
+    <style name="Light" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:background">@color/colorLightSchemeBackground</item>
+        <item name="android:buttonStyle">@style/LightButtons</item>
+        <item name="android:textViewStyle">@style/LightTextViews</item>
+        <item name="filledCellColor">@color/colorLightSchemeFilledCell</item>
+        <item name="emptyCellColor">@color/colorLightSchemeEmptyCell</item>
+        <item name="imageButtonStyle">@style/LightButtons</item>
+        <item name="logo_icon">@drawable/ic_logo_light</item>
+        <item name="pause_button_icon">@drawable/ic_pause_light</item>
+        <item name="left_button_icon">@drawable/ic_light_left</item>
+        <item name="right_button_icon">@drawable/ic_light_right</item>
+        <item name="speed_up_button_icon">@drawable/ic_light_down</item>
+        <item name="rotate_button_icon">@drawable/ic_rotate_light</item>
+        <item name="resume_button_icon">@drawable/ic_play_light</item>
+        <item name="top_action_bar_color">@color/colorLightSchemeButtons</item>
+        <item name="android:fontFamily">@font/nunito_semibold</item>
+        <item name="switch_text">@string/light_theme_switch</item>
+        <item name="switch_text_color">@color/colorLightSchemeFilledCell</item>
     </style>
 
-    <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
+    <style name="LightButtons" parent="Buttons">
+        <item name="android:background">@color/colorLightSchemeButtons</item>
+        <item name="android:textColor">@color/colorLightSchemeBackground</item>
+    </style>
+    <style name="LightTextViews" parent="TextViews">
+        <item name="android:textColor">@color/colorLightSchemeFilledCell</item>
+    </style>
+    <style name="TetrisLightTheme">
+        <item name="filledCellColor">@color/colorLightSchemeFilledCell</item>
+        <item name="emptyCellColor">@color/colorLightSchemeEmptyCell</item>
+    </style>
+
+    <style name="Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:background">@color/colorDarkSchemeBackground</item>
+        <item name="android:buttonStyle">@style/DarkButtons</item>
+        <item name="android:textViewStyle">@style/DarkTextViews</item>
+        <item name="emptyCellColor">@color/colorDarkSchemeEmptyCell</item>
+        <item name="filledCellColor">@color/colorDarkSchemeFilledCell</item>
+        <item name="imageButtonStyle">@style/DarkButtons</item>
+        <item name="logo_icon">@drawable/ic_logo_dark</item>
+        <item name="pause_button_icon">@drawable/ic_pause_dark</item>
+        <item name="left_button_icon">@drawable/ic_dark_left</item>
+        <item name="right_button_icon">@drawable/ic_dark_right</item>
+        <item name="speed_up_button_icon">@drawable/ic_dark_down</item>
+        <item name="rotate_button_icon">@drawable/ic_rotate_dark</item>
+        <item name="resume_button_icon">@drawable/ic_play_dark</item>
+        <item name="top_action_bar_color">@color/colorDarkSchemeButtons</item>
+        <item name="android:fontFamily">@font/nunito_semibold</item>
+        <item name="switch_text">@string/dark_theme_switch</item>
+        <item name="switch_text_color">@color/colorDarkSchemeFilledCell</item>
+    </style>
+
+    <style name="DarkButtons" parent="Buttons">
+        <item name="android:background">@color/colorDarkSchemeButtons</item>
+        <item name="android:textColor">@color/colorDarkSchemeBackground</item>
+    </style>
+    <style name="DarkTextViews" parent="TextViews">
+        <item name="android:textColor">@color/colorDarkSchemeFilledCell</item>
+    </style>
+    <style name="TetrisDarkTheme">
+        <item name="emptyCellColor">@color/colorDarkSchemeEmptyCell</item>
+        <item name="filledCellColor">@color/colorDarkSchemeFilledCell</item>
+    </style>
+
+    <style name="Theme.AppCompat.Light.Translucent.NoActionBar" parent="Light">
         <item name="android:background">#00000000</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+
+    <style name="Dark.Translucent" parent="Dark">
+        <item name="android:background">#00000000</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="buttonStyle">@style/DarkButtons</item>
+        <item name="android:textViewStyle">@style/DarkTextViews</item>
+    </style>
+
+    <style name="Light.Translucent" parent="Light">
+        <item name="android:background">#00000000</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="android:buttonStyle">@style/LightButtons</item>
+        <item name="android:textViewStyle">@style/LightTextViews</item>
+    </style>
+
+    <style name="Buttons">
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="TextViews">
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
 </resources>
