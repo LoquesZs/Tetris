@@ -15,18 +15,17 @@ class StartMenu : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         when(getPreferences(Context.MODE_PRIVATE).getString(appThemeStorage, lightAppTheme)){
-            lightAppTheme -> {
-                setTheme(R.style.Light)
-                switch_theme_button.isChecked = false
-            }
-            darkAppTheme -> {
-                setTheme(R.style.Dark)
-                switch_theme_button.isChecked = true
-            }
+            lightAppTheme -> setTheme(R.style.Light)
+            darkAppTheme -> setTheme(R.style.Dark)
         }
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.start_menu_activity)
+
+        when(getPreferences(Context.MODE_PRIVATE).getString(appThemeStorage, lightAppTheme)) {
+            lightAppTheme -> switch_theme_button.isChecked = false
+            darkAppTheme -> switch_theme_button.isChecked = true
+        }
 
         start_button.setOnClickListener {
             val startGameIntent = Intent(this, TetrisActivity::class.java)
