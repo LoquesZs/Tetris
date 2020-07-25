@@ -70,7 +70,17 @@ class TetrisActivity : AppCompatActivity() {
     private val speedMagnifier = 5
     private var isSpeedUpButtonDown = false
 
+    private val appThemeStorage = "Application Theme"
+    private val darkAppTheme = "Dark Application Theme"
+    private val lightAppTheme = "Light Application Theme"
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        when(getSharedPreferences("StartMenu", Context.MODE_PRIVATE).getString(appThemeStorage, lightAppTheme)) {
+            lightAppTheme -> setTheme(R.style.Light)
+            darkAppTheme -> setTheme(R.style.Dark)
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tetris_activity)
 

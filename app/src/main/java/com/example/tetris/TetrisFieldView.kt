@@ -1,4 +1,5 @@
 package com.example.tetris
+
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -12,8 +13,11 @@ const val xCellCount = 10
 const val yCellCount = 20
 
 class TetrisFieldView(context: Context, attributeSet: AttributeSet?): View(context, attributeSet) {
-    private val filledCellColor = getColor(this.context, R.color.colorLightSchemeFilledCell)
-    private val emptyCellColor = getColor(this.context, R.color.colorLightSchemeEmptyCell)
+
+
+    private val styledAttributes = context.obtainStyledAttributes(attributeSet, R.styleable.TetrisFieldView)
+    private val filledCellColor = styledAttributes.getColor(R.styleable.TetrisFieldView_filledCellColor, getColor(this.context, R.color.colorLightSchemeFilledCell))
+    private val emptyCellColor = styledAttributes.getColor(R.styleable.TetrisFieldView_emptyCellColor,getColor(this.context, R.color.colorLightSchemeEmptyCell))
 
     var field:  Array<Array<Int>> = Array(xCellCount) { Array(yCellCount) { 0 } }
 

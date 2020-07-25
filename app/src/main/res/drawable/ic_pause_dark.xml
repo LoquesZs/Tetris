@@ -3,22 +3,18 @@
     android:height="25dp"
     android:viewportWidth="26485"
     android:viewportHeight="26485">
-  <group>
-
     <path
         android:pathData="M5964,4924L11086,4924 11086,20478 5964,20478 5964,4924 5964,4924Z"
         android:strokeLineJoin="round"
         android:strokeWidth="28.222"
-        android:fillColor="#F68AF9"
+        android:fillColor="#021435"
         android:strokeColor="#00000000"
         android:fillType="evenOdd"/>
-
     <path
         android:pathData="M14288,4965L19410,4965 19410,20519 14288,20519 14288,4965 14288,4965Z"
         android:strokeLineJoin="round"
         android:strokeWidth="28.222"
-        android:fillColor="#F68AF9"
+        android:fillColor="#021435"
         android:strokeColor="#00000000"
         android:fillType="evenOdd"/>
-  </group>
 </vector>

@@ -4,7 +4,7 @@
     <string name="title_activity_start_menu" translatable="false">StartMenuActivity</string>
     <string name="start_game_button" translatable="false">Play</string>
     <string name="highscores_button" translatable="false">Highscores</string>
-    <string name="settings_button" translatable="false">Settings</string>
+    <string name="switch_theme_button" translatable="false">Change Application Theme</string>
     <string name="quit_button" translatable="false">Quit</string>
     <string name="content_description_image_button" translatable="false">Image Button</string>
     <string name="imageview_content_description">Image</string>
@@ -13,6 +13,8 @@
     <string name="best_score_prefix_tv">"Best: "</string>
     <string name="pause_menu_title">PAUSE</string>
     <string name="resume_button_text">Resume</string>
+    <string name="light_theme_switch">Set up dark theme</string>
+    <string name="dark_theme_switch">Set up light theme</string>
 
 
 </resources>
