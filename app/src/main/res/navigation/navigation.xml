@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/navHostFragment">
+
+    <fragment
+        android:id="@+id/navHostFragment"
+        android:name="com.example.tetris.NavHostFragment"
+        android:label="fragment_nav_host"
+        tools:layout="@layout/fragment_nav_host" />
+    <activity
+        android:id="@+id/tetrisActivity"
+        android:name="com.example.tetris.TetrisActivity"
+        android:label="tetris_activity"
+        tools:layout="@layout/tetris_activity" />
+    <activity
+        android:id="@+id/pauseMenu"
+        android:name="com.example.tetris.PauseMenu"
+        android:label="PauseMenu" />
+</navigation>

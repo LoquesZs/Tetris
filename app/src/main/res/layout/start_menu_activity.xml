@@ -1,62 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="60dp"
     tools:context=".StartMenu">
 
-    <ImageView
-        android:id="@+id/logo"
+    <fragment
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/imageview_content_description"
-        android:scaleType="centerCrop"
-        android:src="?attr/logo_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-
-    <LinearLayout
-        android:id="@+id/button_holder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/start_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/start_game_button"
-            android:layout_marginBottom="5dp" />
-
-        <Switch
-            android:id="@+id/switch_theme_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="?attr/switch_text"
-            android:textColor="?attr/switch_text_color"
-            android:layout_marginTop="5dp" />
-
-    </LinearLayout>
-    <TextView
-        android:id="@+id/best_score_display_start_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:drawableStart="@drawable/ic_cup"
-        android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/button_holder"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
+        android:layout_height="match_parent"
+        android:name="com.example.tetris.NavHostFragment"
+        android:id="@+id/navigation_host_fragment"
+        tools:layout="@layout/fragment_nav_host"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

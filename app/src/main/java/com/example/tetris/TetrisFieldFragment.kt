@@ -6,18 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-class NavHostFragment : Fragment() {
+class TetrisFieldFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-            }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
-        return inflater.inflate(R.layout.fragment_nav_host, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_tetris_field, container, false)
     }
 }
