@@ -20,12 +20,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".TetrisActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
         <activity android:name=".PauseMenu"
                     android:theme="@style/Light.Translucent">
         </activity>

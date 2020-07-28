@@ -9,12 +9,28 @@
         android:id="@+id/navHostFragment"
         android:name="com.example.tetris.NavHostFragment"
         android:label="fragment_nav_host"
-        tools:layout="@layout/fragment_nav_host" />
-    <activity
-        android:id="@+id/tetrisActivity"
-        android:name="com.example.tetris.TetrisActivity"
-        android:label="tetris_activity"
-        tools:layout="@layout/tetris_activity" />
+        tools:layout="@layout/fragment_nav_host" >
+        <action
+            android:id="@+id/action_navHostFragment_to_tetrisFieldFragment"
+            app:destination="@id/tetrisFieldFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/tetrisFieldFragment"
+        android:name="com.example.tetris.TetrisFieldFragment"
+        android:label="fragment_tetris_field"
+        tools:layout="@layout/fragment_tetris_field" >
+        <action
+            android:id="@+id/action_tetrisFieldFragment_to_pauseMenu"
+            app:destination="@id/pauseMenu"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
     <activity
         android:id="@+id/pauseMenu"
         android:name="com.example.tetris.PauseMenu"
