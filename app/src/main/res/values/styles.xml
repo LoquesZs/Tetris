@@ -26,6 +26,7 @@
         <item name="android:fontFamily">@font/nunito_semibold</item>
         <item name="switch_text">@string/light_theme_switch</item>
         <item name="switch_text_color">@color/colorLightSchemeFilledCell</item>
+        <item name="android:windowAnimationStyle">@android:animator/fade_in</item>
     </style>
 
     <style name="LightButtons" parent="Buttons">
@@ -58,6 +59,7 @@
         <item name="android:fontFamily">@font/nunito_semibold</item>
         <item name="switch_text">@string/dark_theme_switch</item>
         <item name="switch_text_color">@color/colorDarkSchemeFilledCell</item>
+        <item name="android:windowAnimationStyle">@android:animator/fade_in</item>
     </style>
 
     <style name="DarkButtons" parent="Buttons">
@@ -104,7 +106,7 @@
     </style>
 
     <style name="Buttons">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">10dp</item>
     </style>

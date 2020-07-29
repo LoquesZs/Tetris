@@ -28,10 +28,10 @@
 
         <Button
             android:id="@+id/resume_button_pause_menu"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:drawableStart="@drawable/ic_play_light"
+            android:drawableStart="?attr/resume_button_icon"
             android:text="@string/resume_button_text" />
         <Button
             android:id="@+id/quit_button_pause_menu"

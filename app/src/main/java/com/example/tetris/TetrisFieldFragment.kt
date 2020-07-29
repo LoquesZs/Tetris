@@ -1,35 +1,41 @@
 package com.example.tetris
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.MotionEvent
-import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.tetris_activity.*
+import android.view.*
+import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import kotlinx.android.synthetic.main.fragment_tetris_field.*
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-class TetrisActivity : AppCompatActivity() {
+class TetrisFieldFragment : Fragment() {
 
-    private val bestScoreStorage = "Best Score Storage"
+    private val bestScoreStorage = "Best Score Storage"  // key to best score storage in shared preferences
     private lateinit var sharedPreferences: SharedPreferences
-    private var bestScore = "0"
-    private var score = 0
-    private var globalX = 4
-    private val startSpeed = 400L
-    private var speed = startSpeed
-    private var globalY = 0
-    private var nextDrop = false
-    private val pausableDispatcher = PausableDispatcher(Handler(Looper.getMainLooper()))
-    private var figuresFallCoroutine = GlobalScope.launch(pausableDispatcher) { figureDrop() }
-    private var figureIndex = 0
+    private var bestScore = "0" //best score loaded from shared preferences if they're not empty
+    private var score = 0 //game score variable
+
+    private var globalX = 4 // X position of figure on tetris field
+    private var globalY = 0 // Y position of figure on tetris field
+
+    private val startSpeed = 400L // start delay time in ms
+    private var speed = startSpeed // game speed variable
+    private val speedMagnifier = 5 // changes speed by its value
+
+    private var nextDrop = false // indicate if next figure have to dropdown
+    private val pausableDispatcher = PausableDispatcher(Handler(Looper.getMainLooper())) //dispatcher for figuresFallCoroutine that allows pauses in executing coroutine
+    private lateinit var figuresFallCoroutine: Job  // coroutine that drops down figure
+
+    private var figureIndex = 0 // index of current figure on field
     private var figures = arrayListOf (
         arrayListOf(0 to 0, 0 to -1, 0 to -2, 0 to -3),     // |      фигуры
         arrayListOf(0 to 0, 1 to 0, 2 to 0, 3 to 0),        // ....
@@ -65,28 +71,22 @@ class TetrisActivity : AppCompatActivity() {
         arrayListOf(1 to 0, 1 to -1, 0 to -2, 1 to -2),     // *|
         arrayListOf(0 to 0, 0 to -1, 1 to -1, 2 to -1),     // :**
         arrayListOf(0 to 0, 1 to 0, 0 to -1, 0 to -2)       // |_
-    )
+    ) // array of all available figures
     private var figure = getRandomFigure() // x to y
-    private val speedMagnifier = 5
+
     private var isSpeedUpButtonDown = false
 
-    private val appThemeStorage = "Application Theme"
-    private val darkAppTheme = "Dark Application Theme"
-    private val lightAppTheme = "Light Application Theme"
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_tetris_field, container, false)
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-
-        when(getSharedPreferences("StartMenu", Context.MODE_PRIVATE).getString(appThemeStorage, lightAppTheme)) {
-            lightAppTheme -> setTheme(R.style.Light)
-            darkAppTheme -> setTheme(R.style.Dark)
-        }
-
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.tetris_activity)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        figuresFallCoroutine = GlobalScope.launch(pausableDispatcher) { figureDrop() }
+        super.onViewCreated(view, savedInstanceState)
         score_display.text = score.toString()
 
         loadBestScore()
+
         best_score_display.text = bestScore
 
         left_button.setOnClickListener {
@@ -163,8 +163,7 @@ class TetrisActivity : AppCompatActivity() {
         }
 
         pause_button.setOnClickListener {
-            val pauseIntent = Intent(this, PauseMenu::class.java)
-            startActivity(pauseIntent)
+            it.findNavController().navigate(R.id.action_tetrisFieldFragment_to_pauseMenu)
         }
 
         figuresFallCoroutine
@@ -173,26 +172,26 @@ class TetrisActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         pausableDispatcher.pause()
+        Log.d("Pause", "Something wrong")
         saveBestScore()
     }
 
     override fun onResume() {
         super.onResume()
         pausableDispatcher.resume()
+        Log.d("Pause", "Something wrong")
         loadBestScore()
     }
-    
+
     /***********************************************
 
-    tetris utils
+                        tetris utils
 
      ************************************************/
 
     private suspend fun figureDrop() {
         scoreUp(4)
-        score_display.text = score.toString()
         for (y in 0 until yCellCount) {
-            Log.d("Speed",speed.toString() + speed_up_button.isInTouchMode.toString())
             nextDropCheck()
             setButtonsState(true)
             if (!nextDrop) {
@@ -247,6 +246,7 @@ class TetrisActivity : AppCompatActivity() {
             val xIndex = globalX + figure[point].first
             if (yIndex in 0 until yCellCount) tetrisField.field[xIndex][yIndex] = 0
         }
+        tetrisField.invalidate()
     }
 
     private fun ArrayList<Pair<Int, Int>>.isIndicesInFigure(x: Int, y: Int): Boolean {
@@ -280,7 +280,6 @@ class TetrisActivity : AppCompatActivity() {
                         }
                     }
                     scoreUp(100)
-                    score_display.text = score.toString()
                     tetrisField.invalidate()
                 }
             }
@@ -340,7 +339,6 @@ class TetrisActivity : AppCompatActivity() {
         score_display.text = score.toString()
     }
 
-    //TODO: переделать эту функцию
     private suspend fun nextDropCheck() {
         if (nextDrop) {
             globalX = 4
@@ -352,16 +350,19 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun saveBestScore() {
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+        sharedPreferences = activity!!.getPreferences(Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        if (bestScore == "0" || bestScore.toInt() < score) bestScore = score.toString()
-        editor.putString(bestScoreStorage, bestScore)
-        editor.apply()
-        best_score_display.text = bestScore
+        with(editor) {
+            if (bestScore == "0" || bestScore.toInt() < score) bestScore = score.toString()
+            putString(bestScoreStorage, bestScore)
+            apply()
+            best_score_display.text = bestScore
+        }
+
     }
 
     private fun loadBestScore() {
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+        sharedPreferences = activity!!.getPreferences(Context.MODE_PRIVATE)
         bestScore = sharedPreferences.getString(bestScoreStorage, "0") ?: "0"
     }
 
@@ -383,8 +384,6 @@ class TetrisActivity : AppCompatActivity() {
     }
 }
 
-//TODO: Pop up, полное сохранение текущего состояния поля, для возможности продолжения
-//TODO: Анимации
-//TODO: Настройки
-//TODO: Смена цветовых схем
-//TODO: Добавить поддержку старых версий
+//TODO: Привести код в более читабельный вид
+//TODO: GameOverFragment
+//TODO: Навести красоту
