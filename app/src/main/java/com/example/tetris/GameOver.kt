@@ -35,7 +35,8 @@ class GameOver : Fragment() {
             val shareIntent = Intent(Intent.ACTION_SEND)
             with(shareIntent){
                 type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, "${getString(R.string.share_result_intent)} $gameResult")
+                putExtra(Intent.EXTRA_TEXT, "${getString(R.string.share_result_intent)} $gameResult \n" +
+                        "Check for latest versions: ${getString(R.string.app_link)}")
             }
 
             startActivity(shareIntent)
