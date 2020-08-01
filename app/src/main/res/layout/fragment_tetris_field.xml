@@ -92,9 +92,9 @@
 
         <ImageButton
             android:id="@+id/left_button"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.25"
+            android:layout_weight="1"
             android:src="?attr/left_button_icon"
             android:contentDescription="@string/content_description_image_button"
             android:layout_marginStart="0dp"
@@ -104,9 +104,9 @@
 
         <ImageButton
             android:id="@+id/right_button"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.25"
+            android:layout_weight="1"
             android:src="?attr/right_button_icon"
             android:contentDescription="@string/content_description_image_button"
             android:layout_marginStart="5dp"
@@ -116,9 +116,9 @@
 
         <ImageButton
             android:id="@+id/speed_up_button"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.25"
+            android:layout_weight="1"
             android:contentDescription="@string/content_description_image_button"
             android:src="?attr/speed_up_button_icon"
             android:layout_marginStart="5dp"
@@ -128,9 +128,9 @@
 
         <ImageButton
             android:id="@+id/rotate_button"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.25"
+            android:layout_weight="1"
             android:contentDescription="@string/content_description_image_button"
             android:src="?attr/rotate_button_icon"
             android:layout_marginStart="5dp"

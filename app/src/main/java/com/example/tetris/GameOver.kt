@@ -1,5 +1,6 @@
 package com.example.tetris
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -34,7 +35,7 @@ class GameOver : Fragment() {
             val shareIntent = Intent(Intent.ACTION_SEND)
             with(shareIntent){
                 type = "text/plain"
-                putExtra(getString(R.string.share_result_intent), gameResult)
+                putExtra(Intent.EXTRA_TEXT, "${getString(R.string.share_result_intent)} $gameResult")
             }
 
             startActivity(shareIntent)
