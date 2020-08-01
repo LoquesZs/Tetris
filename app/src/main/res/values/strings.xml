@@ -17,6 +17,7 @@
     <string name="dark_theme_switch">Set up light theme</string>
     <string name="game_over_text">GAME OVER</string>
     <string name="share_result">Share</string>
+    <string name="share_result_intent">Look at my new Tetris result: </string>
 
 
 

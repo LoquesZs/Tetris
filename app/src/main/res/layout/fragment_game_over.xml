@@ -20,7 +20,8 @@
         android:id="@+id/result_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableTop="@drawable/ic_cup"/>
+        android:drawableTop="@drawable/ic_cup"
+        android:gravity="center"/>
 
     <Button
         android:id="@+id/new_gama_button_game_over_fragment"

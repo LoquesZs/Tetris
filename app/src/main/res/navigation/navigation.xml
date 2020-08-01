@@ -30,9 +30,29 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_tetrisFieldFragment_to_gameOver"
+            app:destination="@id/gameOver" />
     </fragment>
     <activity
         android:id="@+id/pauseMenu"
         android:name="com.example.tetris.PauseMenu"
-        android:label="PauseMenu" />
+        android:label="PauseMenu"
+        tools:layout="@layout/pause_menu_activity"/>
+    <fragment
+        android:id="@+id/gameOver"
+        android:name="com.example.tetris.GameOver"
+        android:label="fragment_game_over"
+        tools:layout="@layout/fragment_game_over" >
+        <action
+            android:id="@+id/action_gameOver_to_tetrisFieldFragment"
+            app:destination="@id/tetrisFieldFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+        <argument
+            android:name="result"
+            app:argType="integer" />
+    </fragment>
 </navigation>

@@ -205,6 +205,10 @@ class TetrisFieldFragment : Fragment() {
             setButtonsState(false)
             if (nextDrop && y == 0) {
                 figuresFallCoroutine.cancel()
+                val bundle = Bundle()
+                bundle.putInt("result", score)
+                view?.findNavController()
+                    ?.navigate(R.id.action_tetrisFieldFragment_to_gameOver, bundle)
                 return
             }
             nextDropCheck()
