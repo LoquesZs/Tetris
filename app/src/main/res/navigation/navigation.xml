@@ -7,46 +7,50 @@
 
     <fragment
         android:id="@+id/navHostFragment"
-        android:name="com.example.tetris.NavHostFragment"
+        android:name="com.example.tetris.screens.startscreen.NavHostFragment"
         android:label="fragment_nav_host"
         tools:layout="@layout/fragment_nav_host" >
         <action
-            android:id="@+id/action_navHostFragment_to_tetrisFieldFragment"
-            app:destination="@id/tetrisFieldFragment"
+            android:id="@+id/action_navHostFragment_to_tetrisGameFragment"
+            app:destination="@id/tetrisGameFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
-        android:id="@+id/tetrisFieldFragment"
-        android:name="com.example.tetris.TetrisFieldFragment"
-        android:label="fragment_tetris_field"
-        tools:layout="@layout/fragment_tetris_field" >
+        android:id="@+id/tetrisGameFragment"
+        android:name="com.example.tetris.screens.gamescreen.TetrisGameFragment"
+        android:label="fragment_tetris_game"
+        tools:layout="@layout/fragment_tetris_game" >
         <action
-            android:id="@+id/action_tetrisFieldFragment_to_pauseMenu"
+            android:id="@+id/action_tetrisGameFragment_to_pauseMenu"
             app:destination="@id/pauseMenu"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
         <action
-            android:id="@+id/action_tetrisFieldFragment_to_gameOver"
-            app:destination="@id/gameOver" />
+            android:id="@+id/action_tetrisGameFragment_to_gameOver"
+            app:destination="@id/gameOver"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <activity
         android:id="@+id/pauseMenu"
-        android:name="com.example.tetris.PauseMenu"
+        android:name="com.example.tetris.screens.pausescreen.PauseMenu"
         android:label="PauseMenu"
         tools:layout="@layout/pause_menu_activity"/>
     <fragment
         android:id="@+id/gameOver"
-        android:name="com.example.tetris.GameOver"
+        android:name="com.example.tetris.screens.gameoverscreen.GameOverFragment"
         android:label="fragment_game_over"
         tools:layout="@layout/fragment_game_over" >
         <action
-            android:id="@+id/action_gameOver_to_tetrisFieldFragment"
-            app:destination="@id/tetrisFieldFragment"
+            android:id="@+id/action_gameOver_to_tetrisGameFragment"
+            app:destination="@id/tetrisGameFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"

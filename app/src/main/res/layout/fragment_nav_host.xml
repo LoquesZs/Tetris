@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".NavHostFragment"
+    tools:context=".screens.startscreen.NavHostFragment"
     android:padding="60dp">
     <ImageView
         android:id="@+id/logo"
@@ -34,7 +34,7 @@
             android:text="@string/start_game_button"
             android:layout_marginBottom="5dp" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_theme_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,12 +48,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:drawableTop="@drawable/ic_cup"
         android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/button_holder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:drawableTopCompat="@drawable/ic_cup" />
 
 
 

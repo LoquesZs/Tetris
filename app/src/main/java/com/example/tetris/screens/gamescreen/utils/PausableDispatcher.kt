@@ -1,4 +1,4 @@
-package com.example.tetris
+package com.example.tetris.screens.gamescreen.utils
 
 import android.os.Handler
 import kotlinx.coroutines.CoroutineDispatcher

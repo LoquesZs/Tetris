@@ -1,9 +1,11 @@
-package com.example.tetris
+package com.example.tetris.screens.pausescreen
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.tetris.R
+import com.example.tetris.StartMenu
 import kotlinx.android.synthetic.main.pause_menu_activity.*
 
 class PauseMenu: AppCompatActivity() {
