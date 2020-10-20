@@ -1,17 +1,21 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
+    dataBinding {
+        enabled = true
+    }
     defaultConfig {
         applicationId "com.example.tetris"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
-        versionName "6.0.0"
+        versionName "6.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".StartMenu"
-    android:background="@color/colorTransparentBackground">
-
-    <fragment
+<layout>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:id="@+id/navigation_host_fragment"
-        tools:layout="@layout/fragment_nav_host"
-        app:navGraph="@navigation/navigation"
-        app:defaultNavHost="true"
-        />
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".StartMenu"
+        android:background="@color/colorTransparentBackground">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:id="@+id/navigation_host_fragment"
+            tools:layout="@layout/fragment_nav_host"
+            app:navGraph="@navigation/navigation"
+            app:defaultNavHost="true" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

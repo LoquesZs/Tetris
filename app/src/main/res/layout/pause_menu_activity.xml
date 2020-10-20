@@ -1,45 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="40dp"
-        android:background="@color/colorTransparentBackground"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/pause_menu_title"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/pause_menu_title"
-            android:textSize="24sp" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="40dp"
+            android:background="@color/colorTransparentBackground"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/resume_button_pause_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:drawableStart="?attr/resume_button_icon"
-            android:text="@string/resume_button_text" />
-        <Button
-            android:id="@+id/quit_button_pause_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/quit_button"
-            android:layout_marginTop="5dp" />
+            <TextView
+                android:id="@+id/pause_menu_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pause_menu_title"
+                android:textSize="24sp" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/resume_button_pause_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:drawableStart="?attr/resume_button_icon"
+                android:text="@string/resume_button_text" />
+            <Button
+                android:id="@+id/quit_button_pause_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/quit_button"
+                android:layout_marginTop="5dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

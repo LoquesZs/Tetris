@@ -4,13 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-const val APP_THEME_STORAGE = "Application Theme"
-const val DARK_APP_THEME = "Dark Application Theme"
-const val LIGHT_APP_THEME = "Light Application Theme"
-const val Y_CELL_COUNT = 20
-const val X_CELL_COUNT = 10
-const val BEST_SCORE_STORAGE = "Best ScoreHolder Storage" // key to best score storage in shared preferences
-const val RESULT_SCORE = "result"
+internal const val APP_THEME_STORAGE = "Application Theme"
+internal const val DARK_APP_THEME = "Dark Application Theme"
+internal const val LIGHT_APP_THEME = "Light Application Theme"
+internal const val Y_CELL_COUNT = 20
+internal const val X_CELL_COUNT = 10
+internal const val BEST_SCORE_STORAGE = "Best ScoreHolder Storage" // key to best score storage in shared preferences
+internal const val RESULT_SCORE = "result"
 
 class StartMenu : AppCompatActivity() {
 

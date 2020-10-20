@@ -22,7 +22,7 @@
         android:id="@+id/tetrisGameFragment"
         android:name="com.example.tetris.screens.gamescreen.TetrisGameFragment"
         android:label="fragment_tetris_game"
-        tools:layout="@layout/fragment_tetris_game" >
+        tools:layout="@layout/tetris_game_fragment" >
         <action
             android:id="@+id/action_tetrisGameFragment_to_pauseMenu"
             app:destination="@id/pauseMenu"
@@ -47,7 +47,7 @@
         android:id="@+id/gameOver"
         android:name="com.example.tetris.screens.gameoverscreen.GameOverFragment"
         android:label="fragment_game_over"
-        tools:layout="@layout/fragment_game_over" >
+        tools:layout="@layout/game_over_fragment" >
         <action
             android:id="@+id/action_gameOver_to_tetrisGameFragment"
             app:destination="@id/tetrisGameFragment"

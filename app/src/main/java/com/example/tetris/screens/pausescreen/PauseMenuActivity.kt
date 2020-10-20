@@ -4,30 +4,35 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.tetris.R
-import com.example.tetris.StartMenu
+import androidx.databinding.DataBindingUtil
+import com.example.tetris.*
+import com.example.tetris.APP_THEME_STORAGE
+import com.example.tetris.DARK_APP_THEME
+import com.example.tetris.LIGHT_APP_THEME
+import com.example.tetris.databinding.PauseMenuActivityBinding
 import kotlinx.android.synthetic.main.pause_menu_activity.*
 
 class PauseMenu: AppCompatActivity() {
-
-    private val appThemeStorage = "Application Theme"
-    private val darkAppTheme = "Dark Application Theme"
-    private val lightAppTheme = "Light Application Theme"
-
+    private lateinit var binding: PauseMenuActivityBinding
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        when(getSharedPreferences("StartMenu", Context.MODE_PRIVATE).getString(appThemeStorage, lightAppTheme)) {
-            lightAppTheme -> setTheme(R.style.Light_Translucent)
-            darkAppTheme -> setTheme(R.style.Dark_Translucent)
+        when(getSharedPreferences("StartMenu", Context.MODE_PRIVATE).getString(
+            APP_THEME_STORAGE,
+            LIGHT_APP_THEME
+        ))
+        {
+            LIGHT_APP_THEME -> setTheme(R.style.Light_Translucent)
+            DARK_APP_THEME -> setTheme(R.style.Dark_Translucent)
         }
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pause_menu_activity)
+        binding = DataBindingUtil.setContentView(this, R.layout.pause_menu_activity)
 
-        resume_button_pause_menu.setOnClickListener {
+        binding.resumeButtonPauseMenu.setOnClickListener {
             this.finish()
         }
-        quit_button_pause_menu.setOnClickListener {
+        binding.quitButtonPauseMenu.setOnClickListener {
             val quitIntent = Intent(this, StartMenu::class.java)
             startActivity(quitIntent)
         }

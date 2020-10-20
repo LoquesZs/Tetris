@@ -2,8 +2,10 @@ package com.example.tetris.screens.gamescreen
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.tetris.X_CELL_COUNT
 import com.example.tetris.Y_CELL_COUNT
 import com.example.tetris.screens.gamescreen.utils.PausableDispatcher
@@ -24,7 +26,6 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
 
     private var globalX = START_X_POSITION // X position of figure on tetris field
     private var globalY = START_Y_POSITION // Y position of figure on tetris field
-
 
     private var speed = START_SPEED // start delay time in ms
     private val speedMagnifier = SPEED_MAGNIFIER // changes speed by its value
@@ -80,11 +81,26 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
 
     private var isSpeedAccelerated = false
 
-    var isGameOver: Boolean = false
-    val gameField = Array(X_CELL_COUNT) { Array(Y_CELL_COUNT) { 0 } }
+    private var _isGameOver = MutableLiveData<Boolean>()
+    val isGameOver: LiveData<Boolean>
+        get() = _isGameOver
+
+    private val _gameField = MutableLiveData<Array<Array<Int>>>()
+    val gameField: LiveData<Array<Array<Int>>>
+        get() = _gameField
+
+    private val _score = MutableLiveData<Int>()
+    val score: LiveData<Int>
+        get() = _score
+
+    init {
+        _isGameOver.value = false
+        _gameField.value = Array(X_CELL_COUNT) { Array(Y_CELL_COUNT) { 0 } }
+        _score.value = scoreHolder.currentScore
+    }
 
     fun startGame() {
-        isGameOver = false
+        _isGameOver.value = false
         figuresFallCoroutine = GlobalScope.launch(pausableDispatcher) { figureDrop() }
         clearField()
         globalX = START_X_POSITION
@@ -95,9 +111,10 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
     }
 
     fun endGame() {
-        isGameOver = true
-        figuresFallCoroutine.cancel()
+        scoreHolder.currentScore = score.value ?: 0
         scoreHolder.saveBestScore()
+        _isGameOver.value = true
+        figuresFallCoroutine.cancel()
     }
 
     fun pause() {
@@ -142,9 +159,12 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
             for (point in nextFigure.indices) {
                 val yIndex = globalY + nextFigure[point].second
                 val xIndex = globalX + nextFigure[point].first
-                if (gameField[xIndex][yIndex] == 1
-                    && gameField[xIndex][yIndex + 1] == 1
-                    && !figure.isIndicesInFigure(nextFigure[point].first, nextFigure[point].second)) return
+                if (_gameField.value?.get(xIndex)?.get(yIndex) == 1
+                    && _gameField.value?.get(xIndex)?.get(yIndex + 1) == 1
+                    && !figure.isIndicesInFigure(
+                        nextFigure[point].first,
+                        nextFigure[point].second
+                    )) return
             }
             clearFieldFromFigure()
             figure = figures[rotatedFigureIndex]
@@ -163,18 +183,17 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
     }
 
     fun slowDown() {
-        Log.d("Speed","$speed")
         speed *= speedMagnifier
         isSpeedAccelerated = false
-        Log.d("Speed","$speed")
     }
 
     /** Tetris utils **/
 
     private fun clearField() {
-        for (x in gameField.indices) {
-            for (y in gameField[x].indices) {
-                gameField[x][y] = 0
+        for (x in _gameField.value?.indices!!) {
+            for (y in _gameField.value!![x].indices) {
+                _gameField.value!![x][y] = 0
+                //gameField.postValue(gameField.value)
             }
         }
     }
@@ -202,7 +221,10 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
         for (point in figure.indices) {
             val yIndex = globalY + figure[point].second
             val xIndex = globalX + figure[point].first
-            if (yIndex in 0 until Y_CELL_COUNT) gameField[xIndex][yIndex] = 1
+            if (yIndex in 0 until Y_CELL_COUNT) {
+                _gameField.value?.get(xIndex)?.set(yIndex, 1)
+                _gameField.postValue(gameField.value)
+            }
         }
     }
 
@@ -211,10 +233,9 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
         for (point in figure.indices) {
             val yIndex  = globalY + figure[point].second
             val xIndex = globalX + figure[point].first
-            if (
-                yIndex in 0 until Y_CELL_COUNT - 1 &&
+            if (yIndex in 0 until Y_CELL_COUNT - 1 &&
                 !figure.isIndicesInFigure (figure[point].first, figure[point].second + 1) &&
-                (gameField[xIndex][yIndex + 1] == 1))  nextDropCheckSum++
+                (_gameField.value?.get(xIndex)?.get(yIndex + 1) == 1))  nextDropCheckSum++
         }
         nextDrop = when {
             nextDropCheckSum == 0 && globalY in 0 until Y_CELL_COUNT - 1 -> false
@@ -226,8 +247,11 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
         for (point in figure.indices) {
             val yIndex = globalY + figure[point].second
             val xIndex = globalX + figure[point].first
-            if (yIndex in 0 until Y_CELL_COUNT) gameField[xIndex][yIndex] = 0
+            if (yIndex in 0 until Y_CELL_COUNT) {
+                _gameField.value?.get(xIndex)?.set(yIndex, 0)
+            }
         }
+        _gameField.postValue(gameField.value)
     }
 
     private fun ArrayList<Pair<Int, Int>>.isIndicesInFigure(x: Int, y: Int): Boolean {
@@ -251,12 +275,15 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
         var sum = 0
         for (y in 0 until Y_CELL_COUNT) {
             for (x in 0 until X_CELL_COUNT) {
-                sum += gameField[x][y]
+                sum += _gameField.value?.get(x)?.get(y)!!
                 if (x == (X_CELL_COUNT -1) && sum == X_CELL_COUNT) {
                     delay (speed)
                     for (innerY in y downTo 0) {
                         for (innerX in 0 until X_CELL_COUNT) {
-                            if (innerY > 0) gameField[innerX][innerY] = gameField[innerX][innerY - 1]
+                            if (innerY > 0) {
+                                _gameField.value!![innerX][innerY] =
+                                    _gameField.value!![innerX][innerY - 1]
+                            }
                         }
                     }
                     scoreUp(100)
@@ -264,6 +291,7 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
             }
             sum = 0
         }
+        _gameField.postValue(gameField.value)
     }
 
     private fun getRandomFigure(): ArrayList<Pair<Int, Int>> {
@@ -279,7 +307,7 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
             if (yIndex in 1 until Y_CELL_COUNT) {
                 if(xIndex in 1 until X_CELL_COUNT
                     && !figure.isIndicesInFigure((figure[point].first - 1), (figure[point].second))
-                    && gameField[xIndex - 1][yIndex] == 1) isLeftCellFilled = true
+                    && _gameField.value?.get(xIndex - 1)?.get(yIndex) == 1) isLeftCellFilled = true
             }
         }
         return isLeftCellFilled
@@ -293,7 +321,9 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
             if (globalY in 1 until Y_CELL_COUNT) {
                 if(xIndex in 0 until X_CELL_COUNT -1
                     && !figure.isIndicesInFigure((figure[point].first + 1), (figure[point].second))
-                    && gameField[xIndex + 1][yIndex] == 1) isRightCellFilled = true
+                    && _gameField.value?.get(xIndex + 1)?.get(yIndex) == 1) {
+                    isRightCellFilled = true
+                }
             }
         }
         return isRightCellFilled
@@ -314,7 +344,7 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
             value == 100 && !isSpeedAccelerated -> speedMagnifier.toLong()
             else -> 0
         }
-        scoreHolder.currentScore += value
+        _score.value = _score.value?.plus(value)
     }
 
     private suspend fun nextDropCheck() {
@@ -325,5 +355,14 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
             figure = getRandomFigure()
             figureDrop()
         }
+    }
+}
+
+class TetrisGameViewModelFactory(private val scoreHolder: ScoreHolder) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(TetrisGameViewModel::class.java)) {
+            return TetrisGameViewModel(scoreHolder) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

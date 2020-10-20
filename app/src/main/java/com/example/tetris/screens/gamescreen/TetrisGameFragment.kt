@@ -1,22 +1,25 @@
 package com.example.tetris.screens.gamescreen
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.*
 import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.tetris.R
 import com.example.tetris.RESULT_SCORE
+import com.example.tetris.databinding.TetrisGameFragmentBinding
 import com.example.tetris.utils.ScoreHolder
-import kotlinx.android.synthetic.main.fragment_tetris_game.*
+import kotlinx.android.synthetic.main.tetris_game_fragment.*
 
 class TetrisGameFragment : Fragment() {
 
-    private lateinit var tetrisFieldInvalidation: Runnable
-    private lateinit var handler: Handler
+    private lateinit var binding: TetrisGameFragmentBinding
     private lateinit var tetrisGameViewModel: TetrisGameViewModel
+    private lateinit var tetrisGameViewModelFactory: TetrisGameViewModelFactory
     private lateinit var scoreHolder: ScoreHolder
 
     override fun onCreateView(
@@ -25,54 +28,49 @@ class TetrisGameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        handler = Handler()
-        tetrisFieldInvalidation = Runnable {
-            if (tetrisField != null) tetrisField.invalidate()
-            if (score_display != null) score_display.text = scoreHolder.currentScore.toString()
-            if (best_score_display != null) best_score_display.text = scoreHolder.bestScore.toString()
-            if (tetrisGameViewModel.isGameOver) {
-                val navController = findNavController()
-                if (navController.currentDestination?.id == R.id.tetrisGameFragment) {
-                    val bundle = bundleOf(RESULT_SCORE to scoreHolder.currentScore)
-                    navController.navigate(R.id.action_tetrisGameFragment_to_gameOver, bundle)
-                }
-            }
-            handler.postDelayed(tetrisFieldInvalidation, 17)
-        }
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.tetris_game_fragment,
+            container,
+            false
+        )
+
         scoreHolder = activity?.let { ScoreHolder(it) }!!
-        tetrisGameViewModel = TetrisGameViewModel(scoreHolder)
+        tetrisGameViewModelFactory = TetrisGameViewModelFactory(scoreHolder)
+        tetrisGameViewModel = ViewModelProvider(this, tetrisGameViewModelFactory).get(
+            TetrisGameViewModel::class.java
+        )
 
-        return inflater.inflate(R.layout.fragment_tetris_game, container, false)
-    }
+        tetrisGameViewModel.isGameOver.observe(viewLifecycleOwner, Observer {
+            if (!it) return@Observer
+            val navController = findNavController()
+            if (navController.currentDestination?.id == R.id.tetrisGameFragment) {
+                val bundle = bundleOf(RESULT_SCORE to tetrisGameViewModel.score.value)
+                navController.navigate(R.id.action_tetrisGameFragment_to_gameOver, bundle)
+            }
+        })
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        tetrisGameViewModel.gameField.observe(viewLifecycleOwner, Observer {
+            tetrisField.invalidate()
+        })
 
-        score_display.text = scoreHolder.currentScore.toString()
+        tetrisGameViewModel.score.observe(viewLifecycleOwner, Observer {
+            binding.scoreDisplay.text = it.toString()
+        })
 
-        best_score_display.text = scoreHolder.bestScore.toString()
+        binding.bestScoreDisplay.text = scoreHolder.bestScore.toString()
 
-        left_button.setOnClickListener {
+        binding.leftButton.setOnClickListener {
             tetrisGameViewModel.moveLeft()
         }
-
-        rotate_button.setOnClickListener {
+        binding.rotateButton.setOnClickListener {
             tetrisGameViewModel.rotateFigure()
         }
-
-        right_button.setOnClickListener {
+        binding.rightButton.setOnClickListener {
             tetrisGameViewModel.moveRight()
         }
 
-        new_game_button.setOnClickListener {
-            tetrisGameViewModel.endGame()
-            scoreHolder.saveBestScore()
-            scoreHolder.currentScore = 0
-            score_display.text = scoreHolder.currentScore.toString()
-            tetrisGameViewModel.startGame()
-        }
-
-        speed_up_button.setOnTouchListener { v, event ->
+        binding.speedUpButton.setOnTouchListener { v, event ->
             v.performClick()
             if (event != null) {
                 when (event.actionMasked) {
@@ -87,15 +85,27 @@ class TetrisGameFragment : Fragment() {
             true
         }
 
-        pause_button.setOnClickListener {
+        binding.newGameButton.setOnClickListener {
+            tetrisGameViewModel.endGame()
+            scoreHolder.saveBestScore()
+            scoreHolder.currentScore = 0
+            score_display.text = scoreHolder.currentScore.toString()
+            tetrisGameViewModel.startGame()
+        }
+
+        binding.pauseButton.setOnClickListener {
             it.findNavController().navigate(R.id.action_tetrisGameFragment_to_pauseMenu)
         }
 
-        tetrisField.field = tetrisGameViewModel.gameField
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        tetrisField.field = tetrisGameViewModel.gameField.value!!
     }
 
     override fun onStart() {
-        handler.post(tetrisFieldInvalidation)
         tetrisGameViewModel.startGame()
         super.onStart()
     }
@@ -103,19 +113,16 @@ class TetrisGameFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         tetrisGameViewModel.pause()
-        handler.removeCallbacks(tetrisFieldInvalidation)
         scoreHolder.saveBestScore()
     }
 
     override fun onResume() {
         super.onResume()
         tetrisGameViewModel.resume()
-        handler.post(tetrisFieldInvalidation)
     }
 
     override fun onStop() {
         super.onStop()
         tetrisGameViewModel.endGame()
-        handler.removeCallbacks(tetrisFieldInvalidation)
     }
 }
