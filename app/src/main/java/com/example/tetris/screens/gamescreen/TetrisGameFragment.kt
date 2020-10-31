@@ -1,10 +1,12 @@
 package com.example.tetris.screens.gamescreen
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -12,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.tetris.R
 import com.example.tetris.RESULT_SCORE
 import com.example.tetris.databinding.TetrisGameFragmentBinding
+import com.example.tetris.screens.pausescreen.PauseMenu
 import com.example.tetris.utils.ScoreHolder
 import kotlinx.android.synthetic.main.tetris_game_fragment.*
 
@@ -86,11 +89,12 @@ class TetrisGameFragment : Fragment() {
         }
 
         binding.newGameButton.setOnClickListener {
-            tetrisGameViewModel.endGame()
-            scoreHolder.saveBestScore()
-            scoreHolder.currentScore = 0
+            //scoreHolder.saveBestScore()
+            //scoreHolder.currentScore = 0
             score_display.text = scoreHolder.currentScore.toString()
-            tetrisGameViewModel.startGame()
+            tetrisGameViewModel.newGame()
+            //tetrisGameViewModel.endGame()
+            //tetrisGameViewModel.startGame()
         }
 
         binding.pauseButton.setOnClickListener {

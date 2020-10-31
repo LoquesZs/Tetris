@@ -94,27 +94,30 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
         get() = _score
 
     init {
-        _isGameOver.value = false
+        _isGameOver.value = true
         _gameField.value = Array(X_CELL_COUNT) { Array(Y_CELL_COUNT) { 0 } }
         _score.value = scoreHolder.currentScore
     }
 
     fun startGame() {
-        _isGameOver.value = false
-        figuresFallCoroutine = GlobalScope.launch(pausableDispatcher) { figureDrop() }
-        clearField()
-        globalX = START_X_POSITION
-        globalY = START_Y_POSITION
-        figure = getRandomFigure()
-        speed = START_SPEED
-        figuresFallCoroutine.start()
+        if(_isGameOver.value!!) {
+            _isGameOver.value = false
+            figuresFallCoroutine = GlobalScope.launch(pausableDispatcher) { figureDrop() }
+            clearField()
+            globalX = START_X_POSITION
+            globalY = START_Y_POSITION
+            figure = getRandomFigure()
+            speed = START_SPEED
+            figuresFallCoroutine.start()
+        }
     }
 
     fun endGame() {
-        scoreHolder.currentScore = score.value ?: 0
-        scoreHolder.saveBestScore()
-        _isGameOver.value = true
-        figuresFallCoroutine.cancel()
+        if(_isGameOver.value!!) {
+            scoreHolder.currentScore = score.value ?: 0
+            scoreHolder.saveBestScore()
+            figuresFallCoroutine.cancel()
+        }
     }
 
     fun pause() {
@@ -187,6 +190,12 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
         isSpeedAccelerated = false
     }
 
+    fun newGame() {
+        endGame()
+        _isGameOver.value = true
+        startGame()
+    }
+
     /** Tetris utils **/
 
     private fun clearField() {
@@ -210,6 +219,7 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
             }
             delay(speed)
             if (nextDrop && y == 0) {
+                _isGameOver.value = true
                 endGame()
                 return
             }
