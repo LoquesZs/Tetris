@@ -24,7 +24,7 @@ class NavHostFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater,
@@ -39,16 +39,22 @@ class NavHostFragment : Fragment() {
             it.findNavController().navigate(R.id.action_navHostFragment_to_tetrisGameFragment)
         }
         binding.switchThemeButton.setOnClickListener {
-            when (activity!!.getPreferences(Context.MODE_PRIVATE).getString(APP_THEME_STORAGE, LIGHT_APP_THEME)) {
-                LIGHT_APP_THEME -> activity!!.getPreferences(Context.MODE_PRIVATE).edit().putString(
-                    APP_THEME_STORAGE, DARK_APP_THEME
-                ).apply()
-                DARK_APP_THEME -> activity!!.getPreferences(Context.MODE_PRIVATE).edit().putString(
-                    APP_THEME_STORAGE, LIGHT_APP_THEME
-                ).apply()
+            when (requireActivity()
+                .getPreferences(Context.MODE_PRIVATE)
+                .getString(APP_THEME_STORAGE, LIGHT_APP_THEME)) {
+                LIGHT_APP_THEME -> requireActivity()
+                    .getPreferences(Context.MODE_PRIVATE)
+                    .edit()
+                    .putString(APP_THEME_STORAGE, DARK_APP_THEME)
+                    .apply()
+                DARK_APP_THEME -> requireActivity()
+                    .getPreferences(Context.MODE_PRIVATE)
+                    .edit()
+                    .putString(APP_THEME_STORAGE, LIGHT_APP_THEME)
+                    .apply()
             }
-            val appIntent = activity!!.intent
-            activity!!.finish()
+            val appIntent = requireActivity().intent
+            requireActivity().finish()
             startActivity(appIntent)
         }
 
@@ -57,7 +63,8 @@ class NavHostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        when(activity!!.getPreferences(Context.MODE_PRIVATE).getString(APP_THEME_STORAGE, LIGHT_APP_THEME)) {
+        when(requireActivity().getPreferences(Context.MODE_PRIVATE)
+            .getString(APP_THEME_STORAGE, LIGHT_APP_THEME)) {
             LIGHT_APP_THEME -> switch_theme_button.isChecked = false
             DARK_APP_THEME -> switch_theme_button.isChecked = true
         }
