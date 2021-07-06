@@ -20,10 +20,11 @@ buildscript {
 allprojects {
     repositories {
         google()
+        maven { url = uri("https://kotlin.bintray.com/kotlinx") }
         mavenCentral()
     }
 }
 
-tasks.register("clean",Delete::class){
+tasks.register("clean",Delete::class) {
     delete(rootProject.buildDir)
 }

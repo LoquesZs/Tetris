@@ -2,15 +2,11 @@ package com.example.tetris.screens.gamescreen
 
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.example.tetris.X_CELL_COUNT
 import com.example.tetris.Y_CELL_COUNT
 import com.example.tetris.screens.gamescreen.utils.PausableDispatcher
 import com.example.tetris.utils.ScoreHolder
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -102,7 +98,7 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
     fun startGame() {
         if(_isGameOver.value!!) {
             _isGameOver.value = false
-            figuresFallCoroutine = GlobalScope.launch(pausableDispatcher) { figureDrop() }
+            figuresFallCoroutine = viewModelScope.launch(pausableDispatcher) { figureDrop() }
             clearField()
             globalX = START_X_POSITION
             globalY = START_Y_POSITION
