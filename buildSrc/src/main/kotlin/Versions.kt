@@ -1,5 +1,9 @@
 object Versions {
 
+    object Gradle {
+        const val version = "4.2.2"
+    }
+
     object Android {
         const val appCompat = "1.3.0"
         const val constraint = "2.0.4"
@@ -7,6 +11,7 @@ object Versions {
     }
 
     object Kotlin {
+        const val gradlePlugin = "1.5.20"
         const val core = "1.6.0"
         const val coroutines = "1.5.0"
     }
