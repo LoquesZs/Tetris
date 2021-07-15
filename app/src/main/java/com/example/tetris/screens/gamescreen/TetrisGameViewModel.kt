@@ -38,7 +38,7 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
 
     private var figureIndex = 0 // index of current figure on field
     private val figures = arrayListOf (
-        arrayListOf(0 to 0, 0 to -1, 0 to -2, 0 to -3),     // |      фигуры
+        arrayListOf(0 to 0, 0 to -1, 0 to -2, 0 to -3),     // |
         arrayListOf(0 to 0, 1 to 0, 2 to 0, 3 to 0),        // ....
         arrayListOf(0 to 0, 0 to -1, 0 to -2, 0 to -3),     // |
         arrayListOf(0 to 0, 1 to 0, 2 to 0, 3 to 0),        // ....
@@ -364,6 +364,7 @@ class TetrisGameViewModel(private val scoreHolder: ScoreHolder) : ViewModel() {
     }
 }
 
+@Suppress("Unchecked_Cast")
 class TetrisGameViewModelFactory(private val scoreHolder: ScoreHolder) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TetrisGameViewModel::class.java)) {

@@ -1,12 +1,11 @@
 package com.example.tetris.screens.gamescreen
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -14,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.tetris.R
 import com.example.tetris.RESULT_SCORE
 import com.example.tetris.databinding.TetrisGameFragmentBinding
-import com.example.tetris.screens.pausescreen.PauseMenu
 import com.example.tetris.utils.ScoreHolder
 import kotlinx.android.synthetic.main.tetris_game_fragment.*
 
@@ -25,11 +23,12 @@ class TetrisGameFragment : Fragment() {
     private lateinit var tetrisGameViewModelFactory: TetrisGameViewModelFactory
     private lateinit var scoreHolder: ScoreHolder
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater,
@@ -44,8 +43,8 @@ class TetrisGameFragment : Fragment() {
             TetrisGameViewModel::class.java
         )
 
-        tetrisGameViewModel.isGameOver.observe(viewLifecycleOwner, Observer {
-            if (!it) return@Observer
+        tetrisGameViewModel.isGameOver.observe(viewLifecycleOwner, Observer { isGameOver ->
+            if (!isGameOver) return@Observer
             val navController = findNavController()
             if (navController.currentDestination?.id == R.id.tetrisGameFragment) {
                 val bundle = bundleOf(RESULT_SCORE to tetrisGameViewModel.score.value)
@@ -53,13 +52,13 @@ class TetrisGameFragment : Fragment() {
             }
         })
 
-        tetrisGameViewModel.gameField.observe(viewLifecycleOwner, Observer {
+        tetrisGameViewModel.gameField.observe(viewLifecycleOwner) {
             tetrisField.invalidate()
-        })
+        }
 
-        tetrisGameViewModel.score.observe(viewLifecycleOwner, Observer {
+        tetrisGameViewModel.score.observe(viewLifecycleOwner) {
             binding.scoreDisplay.text = it.toString()
-        })
+        }
 
         binding.bestScoreDisplay.text = scoreHolder.bestScore.toString()
 
@@ -89,12 +88,8 @@ class TetrisGameFragment : Fragment() {
         }
 
         binding.newGameButton.setOnClickListener {
-            //scoreHolder.saveBestScore()
-            //scoreHolder.currentScore = 0
             score_display.text = scoreHolder.currentScore.toString()
             tetrisGameViewModel.newGame()
-            //tetrisGameViewModel.endGame()
-            //tetrisGameViewModel.startGame()
         }
 
         binding.pauseButton.setOnClickListener {
